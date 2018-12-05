@@ -1,0 +1,20 @@
+{
+  "name": "ftc/saas-bundle",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Felix Niedballa",
+      "email": "schreib@felixniedballa.de"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "FTC\\SaasBundle\\": ""
+    },
+    "exclude-from-classmap": [
+      "Tests/"
+    ]
+  }
+}
