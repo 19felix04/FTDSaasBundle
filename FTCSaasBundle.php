@@ -1,9 +1,9 @@
 <?php
 
-namespace FTC\SaasBundle;
+namespace FTD\SaasBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class FTCSaasBundle extends Bundle
+class FTDSaasBundle extends Bundle
 {
 }
