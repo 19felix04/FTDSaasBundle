@@ -17,6 +17,16 @@ ftd_saas:
 
 Time between two password reset requests.
 
+## mailer
+
+### address
+
+The e-mail-address of the mail sender.
+
+### sender_name
+
+The name of the mail sender.
+
 ## templates
 
 ### passwordForget
