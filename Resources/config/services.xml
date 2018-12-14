@@ -1,0 +1,23 @@
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" public="false" autoconfigure="true">
+            <bind key="$passwordResetTime" type="string">%ftd_saas.passwordResetTime%</bind>
+            <bind key="$templatePasswordForget" type="string">%ftd_saas.template.passwordForget%</bind>
+            <bind key="$templateAccountCreate" type="string">%ftd_saas.template.accountCreate%</bind>
+            <bind key="$mailerAddress" type="string">%ftd_saas.mailer.address%</bind>
+            <bind key="$mailerSenderName" type="string">%ftd_saas.mailer.sender_name%</bind>
+        </defaults>
+
+        <prototype namespace="FTD\SaasBundle\" resource="../../*" exclude="../../{Entity,Migrations,Tests}" />
+
+        <prototype namespace="FTD\SaasBundle\EntityListener\" resource="../../EntityListener">
+            <tag name="doctrine.event_subscriber"/>
+        </prototype>
+
+        <prototype namespace="FTD\SaasBundle\Controller\" resource="../../Controller">
+            <tag name="controller.service_arguments"/>
+        </prototype>
+    </services>
+</container>

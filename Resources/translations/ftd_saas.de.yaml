@@ -1,0 +1,4 @@
+mail:
+  subject:
+    passwordForget: Passwort vergessen
+    accountCreate: Account erstellt
