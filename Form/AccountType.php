@@ -34,23 +34,23 @@ class AccountType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('plainPassword', PasswordType::class, array(
-                'constraints' => array(
+            ->add('plainPassword', PasswordType::class, [
+                'constraints' => [
                     new NotBlank(),
-                ),
-            ))
-            ->add('username', TextType::class, array(
-                'constraints' => array(
+                ],
+            ])
+            ->add('username', TextType::class, [
+                'constraints' => [
                     new NotBlank(),
-                    new Length(array('min' => 6)),
-                ),
-            ))
-            ->add('email', EmailType::class, array(
-                'constraints' => array(
+                    new Length(['min' => 6]),
+                ],
+            ])
+            ->add('email', EmailType::class, [
+                'constraints' => [
                     new NotBlank(),
                     new Email(),
-                ),
-            ))
+                ],
+            ])
         ;
     }
 

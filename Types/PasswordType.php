@@ -29,15 +29,15 @@ class PasswordType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'constraints' => array(
+        $resolver->setDefaults([
+            'constraints' => [
                 new NotBlank(),
-                new Length(array(
+                new Length([
                     'min' => 6,
                     'max' => 24,
-                )),
-            ),
-        ));
+                ]),
+            ],
+        ]);
     }
 
     /**

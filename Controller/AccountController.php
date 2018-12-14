@@ -101,10 +101,10 @@ class AccountController
             //$this->userManager->update($user);
             $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_CREATE, new UserEvent($user));
 
-            return View::create(array('token' => $jwtManager->create($user)), Response::HTTP_CREATED);
+            return View::create(['token' => $jwtManager->create($user)], Response::HTTP_CREATED);
         }
 
-        return View::create(array('form' => $form), Response::HTTP_BAD_REQUEST);
+        return View::create(['form' => $form], Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -140,17 +140,17 @@ class AccountController
                 $this->userManager->update($user);
                 $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET, new UserEvent($user));
 
-                return View::create(array(), Response::HTTP_CREATED);
+                return View::create([], Response::HTTP_CREATED);
             }
 
             return View::create(
-                array('error' => $translator->trans('error.accountPasswordDelete.notEnoughTimeAgo')),
+                ['error' => $translator->trans('error.accountPasswordDelete.notEnoughTimeAgo')],
                 Response::HTTP_BAD_REQUEST
             );
         }
 
         return View::create(
-            array('error' => $translator->trans('error.accountPasswordDelete.accountNotFound')),
+            ['error' => $translator->trans('error.accountPasswordDelete.accountNotFound')],
             Response::HTTP_NOT_FOUND
         );
     }
@@ -180,7 +180,7 @@ class AccountController
         );
         if (!$user instanceof User) {
             return View::create(
-                array('errors' => $translator->trans('error.accountPasswordPost.noValidConfirmationToken')),
+                ['errors' => $translator->trans('error.accountPasswordPost.noValidConfirmationToken')],
                 Response::HTTP_NOT_FOUND
             );
         }
@@ -194,9 +194,9 @@ class AccountController
             $this->userManager->update($user);
             $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_UPDATE, new UserEvent($user));
 
-            return View::create(array('token' => $jwtManager->create($user)), Response::HTTP_OK);
+            return View::create(['token' => $jwtManager->create($user)], Response::HTTP_OK);
         }
 
-        return View::create(array('form' => $form), Response::HTTP_BAD_REQUEST);
+        return View::create(['form' => $form], Response::HTTP_BAD_REQUEST);
     }
 }

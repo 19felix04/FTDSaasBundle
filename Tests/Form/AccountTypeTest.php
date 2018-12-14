@@ -29,7 +29,7 @@ class AccountTypeTest extends ValidatorExtensionTypeTestCase
         $formData = [
             'username' => 'hans.zimmer',
             'email' => 'hans.zimmer@local.de',
-            'plainPassword' => 'hans.zimmer'
+            'plainPassword' => 'hans.zimmer',
         ];
 
         $objectToCompare = new User();
@@ -38,6 +38,7 @@ class AccountTypeTest extends ValidatorExtensionTypeTestCase
 
         $this->assertTrue($form->isSynchronized());
         $this->assertTrue($form->isValid());
-        $this->assertEquals($user, $objectToCompare);
+        $this->assertSame($user->getUsername(), $objectToCompare->getUsername());
+        $this->assertSame($user->getEmail(), $objectToCompare->getEmail());
     }
 }

@@ -66,9 +66,9 @@ class AccountCreateMailingListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FTDSaasBundleEvents::ACCOUNT_CREATE => 'sendAccountCreateMail',
-        );
+        ];
     }
 
     /**
@@ -90,12 +90,12 @@ class AccountCreateMailingListener implements EventSubscriberInterface
         }
 
         $content = $this->twigEnvironment->render(
-            $this->templateAccountCreate, array('user' => $userEvent->getUser())
+            $this->templateAccountCreate, ['user' => $userEvent->getUser()]
         );
 
         return $this->mailer->sendMail(
             $userEvent->getUser()->getEmail(),
-            $this->translator->trans('mail.subject.accountCreate', array(), 'ftd_saas'),
+            $this->translator->trans('mail.subject.accountCreate', [], 'ftd_saas'),
             $content
         );
     }

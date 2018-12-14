@@ -61,7 +61,7 @@ class SelfPathListenerTest extends TestCase
 
     public function testGetSubscribedEvents()
     {
-        $this->assertSame(array('postLoad', 'postUpdate'), $this->selfPathSettingListener->getSubscribedEvents());
+        $this->assertSame(['postLoad', 'postUpdate'], $this->selfPathSettingListener->getSubscribedEvents());
     }
 
     public function testPostLoad()

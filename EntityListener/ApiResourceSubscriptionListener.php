@@ -44,9 +44,9 @@ class ApiResourceSubscriptionListener implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             Events::postUpdate, Events::postPersist,
-        );
+        ];
     }
 
     /**

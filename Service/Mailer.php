@@ -60,8 +60,8 @@ class Mailer
     public function sendMail($receiver, $subject, $content)
     {
         $message = (new \Swift_Message($subject))
-            ->setFrom(array($this->mailerAddress => $this->mailerSenderName))
-            ->setTo(array($receiver))
+            ->setFrom([$this->mailerAddress => $this->mailerSenderName])
+            ->setTo([$receiver])
             ->setBody($content);
 
         return (bool) $this->swiftMailer->send($message);

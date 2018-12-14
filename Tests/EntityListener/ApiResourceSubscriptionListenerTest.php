@@ -60,7 +60,7 @@ class ApiResourceSubscriptionListenerTest extends TestCase
 
     public function testGetSubscribedEvents()
     {
-        $this->assertSame(array('postUpdate', 'postPersist'), $this->apiResourceSubscriptionListener->getSubscribedEvents());
+        $this->assertSame(['postUpdate', 'postPersist'], $this->apiResourceSubscriptionListener->getSubscribedEvents());
     }
 
     public function testDoctrineEvents()

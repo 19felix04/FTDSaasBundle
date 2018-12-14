@@ -73,9 +73,9 @@ class PasswordForgetMailingListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET => 'sendPasswordForgetMail',
-        );
+        ];
     }
 
     /**
@@ -97,12 +97,12 @@ class PasswordForgetMailingListener implements EventSubscriberInterface
         }
 
         $content = $this->twigEnvironment->render(
-            $this->templatePasswordForget, array('user' => $userEvent->getUser())
+            $this->templatePasswordForget, ['user' => $userEvent->getUser()]
         );
 
         return (bool) $this->mailer->sendMail(
             $userEvent->getUser()->getEmail(),
-            $this->translator->trans('mail.subject.passwordForget', array(), 'ftd_saas'),
+            $this->translator->trans('mail.subject.passwordForget', [], 'ftd_saas'),
             $content
         );
     }

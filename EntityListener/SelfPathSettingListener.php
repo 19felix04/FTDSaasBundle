@@ -42,7 +42,7 @@ class SelfPathSettingListener implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(Events::postLoad, Events::postUpdate);
+        return [Events::postLoad, Events::postUpdate];
     }
 
     /**

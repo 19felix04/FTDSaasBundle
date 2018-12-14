@@ -39,7 +39,7 @@ class ValidatorExtensionTypeTestCase extends TypeTestCase
      */
     protected function getTypes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -50,8 +50,8 @@ class ValidatorExtensionTypeTestCase extends TypeTestCase
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
         $validator->method('validate')->will($this->returnValue(new ConstraintViolationList()));
 
-        return array(
+        return [
             new FormTypeValidatorExtension($validator),
-        );
+        ];
     }
 }

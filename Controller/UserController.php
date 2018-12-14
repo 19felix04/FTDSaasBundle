@@ -46,6 +46,6 @@ class UserController
      */
     public function getMeAction()
     {
-        return View::create(array('user' => $this->authentication->getUser()));
+        return View::create(['user' => $this->authentication->getUser()]);
     }
 }

@@ -37,7 +37,7 @@ class UserRepository extends ServiceEntityRepository implements ApiResourceRepos
      */
     public function getSortableFields()
     {
-        return array('username');
+        return ['username'];
     }
 
     /**

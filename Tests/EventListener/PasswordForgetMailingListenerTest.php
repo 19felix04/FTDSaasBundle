@@ -51,7 +51,7 @@ class PasswordForgetMailingListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertArraySubset(
-            array(FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET => 'sendPasswordForgetMail'),
+            [FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET => 'sendPasswordForgetMail'],
             PasswordForgetMailingListener::getSubscribedEvents()
         );
         $this->assertSame(1, $this->count(PasswordForgetMailingListener::getSubscribedEvents()));

@@ -26,9 +26,9 @@ abstract class BaseType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'allow_extra_fields' => true,
             'csrf_protection' => false,
-        ));
+        ]);
     }
 }

@@ -51,7 +51,7 @@ class AccountCreateMailingListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertArraySubset(
-            array(FTDSaasBundleEvents::ACCOUNT_CREATE => 'sendAccountCreateMail'),
+            [FTDSaasBundleEvents::ACCOUNT_CREATE => 'sendAccountCreateMail'],
             AccountCreateMailingListener::getSubscribedEvents()
         );
         $this->assertSame(1, $this->count(AccountCreateMailingListener::getSubscribedEvents()));

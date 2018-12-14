@@ -25,7 +25,7 @@ class PasswordResetTypeTest extends ValidatorExtensionTypeTestCase
         $user->setPlainPassword('hans.zimmer');
 
         $formData = [
-            'plainPassword' => 'hans.zimmer'
+            'plainPassword' => 'hans.zimmer',
         ];
 
         $objectToCompare = new User();
@@ -34,6 +34,7 @@ class PasswordResetTypeTest extends ValidatorExtensionTypeTestCase
 
         $this->assertTrue($form->isSynchronized());
         $this->assertTrue($form->isValid());
-        $this->assertEquals($user, $objectToCompare);
+        $this->assertSame($user->getUsername(), $objectToCompare->getUsername());
+        $this->assertSame($user->getEmail(), $objectToCompare->getEmail());
     }
 }

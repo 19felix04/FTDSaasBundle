@@ -61,7 +61,7 @@ class FormErrorHandler extends JMSFormErrorsHandler
         $isRoot = null === $visitor->getRoot();
 
         $form = new \ArrayObject();
-        $errors = array();
+        $errors = [];
         foreach ($data->getErrors() as $error) {
             $errors[] = $this->getMessageError($error);
         }
@@ -70,7 +70,7 @@ class FormErrorHandler extends JMSFormErrorsHandler
             $form[] = $errors;
         }
 
-        $children = array();
+        $children = [];
 
         foreach ($data->all() as $child) {
             if ($child instanceof Form) {
