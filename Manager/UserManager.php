@@ -79,9 +79,6 @@ class UserManager extends BaseEntityManager
      *
      * @param User $user
      * @param bool $flush
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function update($user, $flush = true)
     {

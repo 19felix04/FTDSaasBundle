@@ -63,9 +63,6 @@ abstract class BaseEntityManager
      *
      * @param mixed $entity
      * @param bool  $flush
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function update($entity, $flush = true)
     {

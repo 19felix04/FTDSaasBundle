@@ -98,7 +98,7 @@ class AccountController
 
         $form->submit($request->request->all());
         if ($form->isValid()) {
-            //$this->userManager->update($user);
+            $this->userManager->update($user);
             $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_CREATE, new UserEvent($user));
 
             return View::create(['token' => $jwtManager->create($user)], Response::HTTP_CREATED);
@@ -116,8 +116,7 @@ class AccountController
      *
      * @return View
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
      *
      * @Rest\Delete("account/password")
      */
