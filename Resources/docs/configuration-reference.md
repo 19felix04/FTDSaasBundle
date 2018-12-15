@@ -4,7 +4,8 @@ The bundle configuration (`config/packages/ftd_saas.yml`) has the following conf
 
 ```` yaml
 ftd_saas:
-    passwordResetTime: 3600
+    settings:
+        passwordResetTime: 3600
     mailer:
         address: 'test@local.de'
         sender_name: 'Admin-Team'
@@ -13,7 +14,9 @@ ftd_saas:
         accountCreate: '@FTDSaasBundle/mails/passwordForget.html.twig'
 ````
 
-## passwordResetTime
+## settings
+
+### passwordResetTime
 
 Time between two password reset requests.
 

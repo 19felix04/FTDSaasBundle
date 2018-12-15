@@ -30,8 +30,11 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('ftd_saas');
         $rootNode
             ->children()
-                ->integerNode('passwordResetTime')
-                    ->defaultValue(216000)
+                ->arrayNode('settings')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('passwordResetTime')->defaultValue(216000)->end()
+                    ->end()
                 ->end()
                 ->arrayNode('mailer')
                     ->addDefaultsIfNotSet()

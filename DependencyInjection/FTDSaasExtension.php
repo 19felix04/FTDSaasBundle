@@ -37,10 +37,15 @@ class FTDSaasExtension extends Extension
         );
         $loader->load('services.xml');
 
-        $container->setParameter('ftd_saas.passwordResetTime', $config['passwordResetTime']);
-        $container->setParameter('ftd_saas.template.passwordForget', $config['template']['passwordForget']);
-        $container->setParameter('ftd_saas.template.accountCreate', $config['template']['accountCreate']);
-        $container->setParameter('ftd_saas.mailer.address', $config['mailer']['address']);
-        $container->setParameter('ftd_saas.mailer.sender_name', $config['mailer']['sender_name']);
+        $this->loadConfigByArray('settings', $config, $container);
+        $this->loadConfigByArray('template', $config, $container);
+        $this->loadConfigByArray('mailer', $config, $container);
+    }
+
+    public function loadConfigByArray(string $name, array $configs, ContainerBuilder $container)
+    {
+        foreach ($configs[$name] as $configName => $config) {
+            $container->setParameter(sprintf('ftd_saas.%s.%s', $name, $configName), $config);
+        }
     }
 }
