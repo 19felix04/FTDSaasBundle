@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the FTDSaasBundle package.
+ *
+ * (c) Felix Niedballa <https://felixniedballa.de/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FTD\Tests\Controller;
 
 use FOS\RestBundle\View\View;
@@ -36,7 +45,7 @@ class UserControllerTest extends TestCase
 
     public function testGetMeAction()
     {
-        $this->assertEquals(View::class, get_class($this->userController->getMeAction()));
+        $this->assertSame(View::class, get_class($this->userController->getMeAction()));
         $this->assertArrayHasKey('user', $this->userController->getMeAction()->getData());
     }
 }

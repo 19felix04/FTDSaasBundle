@@ -86,6 +86,6 @@ class ApiResourceSubscriptionListenerTest extends TestCase
             $apiResource, $this->objectManager
         ));
 
-        $this->assertEquals($this->subscription, $apiResource->getSubscription());
+        $this->assertSame($this->subscription, $apiResource->getSubscription());
     }
 }

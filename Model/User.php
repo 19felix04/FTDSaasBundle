@@ -312,4 +312,9 @@ abstract class User implements UserInterface
     {
         return null;
     }
+
+    public function isAdmin()
+    {
+        return true;
+    }
 }
