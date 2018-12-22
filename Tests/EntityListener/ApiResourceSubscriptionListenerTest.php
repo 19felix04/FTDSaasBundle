@@ -54,31 +54,38 @@ class ApiResourceSubscriptionListenerTest extends TestCase
         $this->authentication->method('getCurrentSubscription')->willReturn($this->subscription);
 
         $this->objectManager = $this->createMock(ObjectManager::class);
-
-        $this->apiResourceSubscriptionListener = new ApiResourceSubscriptionListener($this->authentication);
     }
 
     public function testGetSubscribedEvents()
     {
+        $this->apiResourceSubscriptionListener = new ApiResourceSubscriptionListener($this->authentication, false);
         $this->assertSame(['postUpdate', 'postPersist'], $this->apiResourceSubscriptionListener->getSubscribedEvents());
     }
 
-    public function testDoctrineEvents()
+    public function testNotSoftwareAsAServicePostUpdate()
     {
         $apiResource = new TestApiResource();
-
-        $this->apiResourceSubscriptionListener->postPersist(new LifecycleEventArgs(
-            $apiResource, $this->objectManager
-        ));
-
-        $this->assertSame($this->subscription, $apiResource->getSubscription());
-
-        $apiResource->setSubscription(null);
+        $this->apiResourceSubscriptionListener = new ApiResourceSubscriptionListener($this->authentication, false);
 
         $this->apiResourceSubscriptionListener->postUpdate(new LifecycleEventArgs(
             $apiResource, $this->objectManager
         ));
 
-        $this->assertSame($this->subscription, $apiResource->getSubscription());
+        $this->assertNull($apiResource->getSubscription());
+    }
+
+    public function testSoftwareAsAServicePostUpdate()
+    {
+        $apiResource = new TestApiResource();
+        $this->apiResourceSubscriptionListener = new ApiResourceSubscriptionListener(
+            $this->authentication,
+            true
+        );
+
+        $this->apiResourceSubscriptionListener->postUpdate(new LifecycleEventArgs(
+            $apiResource, $this->objectManager
+        ));
+
+        $this->assertEquals($this->subscription, $apiResource->getSubscription());
     }
 }

@@ -5,6 +5,8 @@ The bundle configuration (`config/packages/ftd_saas.yml`) has the following conf
 ```` yaml
 ftd_saas:
     settings:
+        softwareAsAService: true
+        registrationAllowed: true
         passwordResetTime: 3600
     mailer:
         address: 'test@local.de'
@@ -15,6 +17,10 @@ ftd_saas:
 ````
 
 ## settings
+
+### softwareAsAService
+The value defines if the application is a software as a service.
+If true for example subscription and plans are available.
 
 ### passwordResetTime
 

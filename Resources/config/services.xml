@@ -4,6 +4,8 @@
     <services>
         <defaults autowire="true" public="false" autoconfigure="true">
             <bind key="$passwordResetTime" type="string">%ftd_saas.settings.passwordResetTime%</bind>
+            <bind key="$settingSoftwareAsAService" type="string">%ftd_saas.settings.softwareAsAService%</bind>
+            <bind key="$settingRegistrationAllowed" type="string">%ftd_saas.settings.registrationAllowed%</bind>
             <bind key="$templatePasswordForget" type="string">%ftd_saas.template.passwordForget%</bind>
             <bind key="$templateAccountCreate" type="string">%ftd_saas.template.accountCreate%</bind>
             <bind key="$mailerAddress" type="string">%ftd_saas.mailer.address%</bind>

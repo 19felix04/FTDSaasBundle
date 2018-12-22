@@ -30,13 +30,22 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     private $authentication;
 
     /**
+     * @var bool
+     */
+    private $settingSoftwareAsAService;
+
+    /**
      * Constructor with injecting authentication service to get current Subscription.
      *
      * @param Authentication $authentication
+     * @param bool           $settingSoftwareAsAService
      */
-    public function __construct(Authentication $authentication)
-    {
+    public function __construct(
+        Authentication $authentication,
+        bool $settingSoftwareAsAService
+    ) {
         $this->authentication = $authentication;
+        $this->settingSoftwareAsAService = $settingSoftwareAsAService;
     }
 
     /**
@@ -73,8 +82,10 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     public function setSubscriptionOnApiResource($entity)
     {
         if (
-            null !== ($subscription = $this->authentication->getCurrentSubscription())
-            && $entity instanceof ApiResource) {
+            $this->settingSoftwareAsAService === true
+            && null !== ($subscription = $this->authentication->getCurrentSubscription())
+            && $entity instanceof ApiResource
+        ) {
             $entity->setSubscription($subscription);
         }
     }
