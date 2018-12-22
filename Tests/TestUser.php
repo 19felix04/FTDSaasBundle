@@ -12,9 +12,11 @@
 namespace FTD\SaasBundle\Tests;
 
 use FTD\SaasBundle\Entity\User;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
+ * @JMS\ExclusionPolicy("all")
  */
 class TestUser extends User
 {

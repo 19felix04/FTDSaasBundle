@@ -41,7 +41,7 @@ abstract class User implements UserInterface
     protected $subscription;
 
     /**
-     * @var?string
+     * @var string|null
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
@@ -49,7 +49,7 @@ abstract class User implements UserInterface
     protected $username;
 
     /**
-     * @var?string
+     * @var string|null
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
@@ -65,22 +65,22 @@ abstract class User implements UserInterface
     protected $enabled;
 
     /**
-     * @var?string
+     * @var string|null
      */
     protected $password;
 
     /**
-     * @var?string
+     * @var string|null
      */
     protected $plainPassword;
 
     /**
-     * @var?string
+     * @var string|null
      */
     protected $oldPassword;
 
     /**
-     * @var?string
+     * @var string|null
      */
     protected $confirmationToken;
 
@@ -90,7 +90,7 @@ abstract class User implements UserInterface
     protected $confirmationRequestAt;
 
     /**
-     * @var?string
+     * @var string|null
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
