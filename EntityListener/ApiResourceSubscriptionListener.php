@@ -32,20 +32,20 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     /**
      * @var bool
      */
-    private $settingSoftwareAsAService;
+    private $settingsSoftwareAsAService;
 
     /**
      * Constructor with injecting authentication service to get current Subscription.
      *
      * @param Authentication $authentication
-     * @param bool           $settingSoftwareAsAService
+     * @param bool           $settingsSoftwareAsAService
      */
     public function __construct(
         Authentication $authentication,
-        bool $settingSoftwareAsAService
+        bool $settingsSoftwareAsAService
     ) {
         $this->authentication = $authentication;
-        $this->settingSoftwareAsAService = $settingSoftwareAsAService;
+        $this->settingsSoftwareAsAService = $settingsSoftwareAsAService;
     }
 
     /**
@@ -54,14 +54,14 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::postUpdate, Events::postPersist,
+            Events::preUpdate, Events::prePersist,
         ];
     }
 
     /**
      * @param LifecycleEventArgs $lifecycleEventArgs
      */
-    public function postUpdate(LifecycleEventArgs $lifecycleEventArgs)
+    public function preUpdate(LifecycleEventArgs $lifecycleEventArgs)
     {
         $this->setSubscriptionOnApiResource($lifecycleEventArgs->getEntity());
     }
@@ -69,7 +69,7 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     /**
      * @param LifecycleEventArgs $lifecycleEventArgs
      */
-    public function postPersist(LifecycleEventArgs $lifecycleEventArgs)
+    public function prePersist(LifecycleEventArgs $lifecycleEventArgs)
     {
         $this->setSubscriptionOnApiResource($lifecycleEventArgs->getEntity());
     }
@@ -82,7 +82,7 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     public function setSubscriptionOnApiResource($entity)
     {
         if (
-            true === $this->settingSoftwareAsAService
+            true === $this->settingsSoftwareAsAService
             && null !== ($subscription = $this->authentication->getCurrentSubscription())
             && $entity instanceof ApiResource
         ) {

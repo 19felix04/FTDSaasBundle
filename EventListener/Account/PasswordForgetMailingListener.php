@@ -9,20 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace FTD\SaasBundle\EventListener;
+namespace FTD\SaasBundle\EventListener\Account;
 
 use FTD\SaasBundle\Event\UserEvent;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Service\Mailer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Error\Error;
 
 /**
- * The class listen to events and send the account creating mail.
+ * The class listen to events and sends the password reset mail.
  *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class AccountCreateMailingListener implements EventSubscriberInterface
+class PasswordForgetMailingListener implements EventSubscriberInterface
 {
     /**
      * @var Mailer
@@ -35,6 +37,11 @@ class AccountCreateMailingListener implements EventSubscriberInterface
     protected $twigEnvironment;
 
     /**
+     * @var RouterInterface
+     */
+    protected $router;
+
+    /**
      * @var TranslatorInterface
      */
     private $translator;
@@ -42,7 +49,7 @@ class AccountCreateMailingListener implements EventSubscriberInterface
     /**
      * @var string
      */
-    private $templateAccountCreate;
+    private $templatePasswordForget;
 
     /**
      * PasswordForgetMailer constructor.
@@ -50,24 +57,24 @@ class AccountCreateMailingListener implements EventSubscriberInterface
      * @param Mailer              $mailer
      * @param \Twig_Environment   $twigEnvironment
      * @param TranslatorInterface $translator
-     * @param string              $templateAccountCreate
+     * @param string              $templatePasswordForget
      */
     public function __construct(
         Mailer $mailer,
         \Twig_Environment $twigEnvironment,
         TranslatorInterface $translator,
-        string $templateAccountCreate
+        string $templatePasswordForget
     ) {
         $this->mailer = $mailer;
         $this->twigEnvironment = $twigEnvironment;
         $this->translator = $translator;
-        $this->templateAccountCreate = $templateAccountCreate;
+        $this->templatePasswordForget = $templatePasswordForget;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            FTDSaasBundleEvents::ACCOUNT_CREATE => 'sendAccountCreateMail',
+            FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET => 'sendPasswordForgetMail',
         ];
     }
 
@@ -80,22 +87,22 @@ class AccountCreateMailingListener implements EventSubscriberInterface
      *
      * @return bool
      */
-    public function sendAccountCreateMail(UserEvent $userEvent)
+    public function sendPasswordForgetMail(UserEvent $userEvent)
     {
         if (
-            0 === strlen($this->templateAccountCreate)
-            || 'false' === $this->templateAccountCreate
+            0 === strlen($this->templatePasswordForget)
+            || 'false' === $this->templatePasswordForget
         ) {
             return;
         }
 
         $content = $this->twigEnvironment->render(
-            $this->templateAccountCreate, ['user' => $userEvent->getUser()]
+            $this->templatePasswordForget, ['user' => $userEvent->getUser()]
         );
 
-        return $this->mailer->sendMail(
+        return (bool) $this->mailer->sendMail(
             $userEvent->getUser()->getEmail(),
-            $this->translator->trans('mail.subject.accountCreate', [], 'ftd_saas'),
+            $this->translator->trans('mail.subject.passwordForget', [], 'ftd_saas'),
             $content
         );
     }

@@ -28,11 +28,6 @@ class Paginator
     private $limit;
 
     /**
-     * @var string
-     */
-    private $environment;
-
-    /**
      * @var EntityManagerInterface
      */
     private $entityManager;
@@ -43,16 +38,13 @@ class Paginator
     private $requestStack;
 
     /**
-     * @param string                 $environment
      * @param EntityManagerInterface $entityManager
      * @param RequestStack           $requestStack
      */
     public function __construct(
-        string $environment,
         EntityManagerInterface $entityManager,
         RequestStack $requestStack
     ) {
-        $this->environment = $environment;
         $this->entityManager = $entityManager;
         $this->requestStack = $requestStack;
     }
@@ -72,11 +64,8 @@ class Paginator
             'results' => $this->getResults($queryBuilder, $this->getCurrentPage()),
             'pages' => $this->getMaxPages($queryBuilder),
             'currentPage' => $this->getCurrentPage(),
+            'query' => $queryBuilder->getQuery()->getDQL()
         ];
-
-        if ('dev' === $this->environment) {
-            $paginationData['query'] = $queryBuilder->getQuery()->getDQL();
-        }
 
         return $paginationData;
     }

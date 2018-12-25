@@ -68,47 +68,4 @@ class UserRepository extends ServiceEntityRepository implements ApiResourceRepos
 
         return $qb->orderBy($alias.'.username', 'ASC');
     }
-
-    /**
-     * The function returns user entity with passing username. If no user is found null will be returned.
-     *
-     * @param string
-     *
-     * @return null|\Symfony\Component\Security\Core\User\UserInterface
-     */
-    public function loadUserByUsername($username)
-    {
-        $qb = $this->createQueryBuilder('user');
-        $qb->where(
-            $qb->expr()->orX(
-                $qb->expr()->eq('user.username', ':username'),
-                $qb->expr()->eq('user.email', ':username')
-            )
-        );
-        $qb->setParameter('username', $username);
-
-        try {
-            return $qb->getQuery()->getOneOrNullResult();
-        } catch (NonUniqueResultException $nonUniqueResultException) {
-            // Not possible cause database constraint
-        }
-    }
-
-    /**
-     * @param string $confirmationToken
-     *
-     * @return null|User
-     */
-    public function findByConfirmationToken(?string $confirmationToken)
-    {
-        $qb = $this->createQueryBuilder('user');
-        $qb->where('user.confirmationToken = :confirmationToken')
-            ->setParameter('confirmationToken', $confirmationToken);
-
-        try {
-            return $qb->getQuery()->getOneOrNullResult();
-        } catch (NonUniqueResultException $nonUniqueResultException) {
-            // Not possible cause database constraint
-        }
-    }
 }

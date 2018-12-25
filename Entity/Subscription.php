@@ -39,13 +39,41 @@ class Subscription extends BaseSubscription
     protected $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="subscription")
+     * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="subscription", cascade={"persist"})
      */
     protected $users;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     *
+     * @return Subscription
+     */
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -70,7 +98,6 @@ class Subscription extends BaseSubscription
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
-            // set the owning side to null (unless already changed)
             if ($user->getSubscription() === $this) {
                 $user->setSubscription(null);
             }

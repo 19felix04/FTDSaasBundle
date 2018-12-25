@@ -12,6 +12,7 @@
 namespace FTD\SaasBundle\Manager;
 
 use FTD\SaasBundle\Entity\Invitation;
+use FTD\SaasBundle\Repository\InvitationRepository;
 
 /**
  * The class InvitationManager manage the updating and finding of an invitation entity.

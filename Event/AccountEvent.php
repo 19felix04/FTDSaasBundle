@@ -11,34 +11,34 @@
 
 namespace FTD\SaasBundle\Event;
 
-use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Entity\Account;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class UserEvent extends Event
+class AccountEvent extends Event
 {
     /**
-     * @var User
+     * @var Account
      */
-    private $user;
+    private $account;
 
     /**
-     * @param User $user
+     * @param Account $account
      */
-    public function __construct(User $user)
+    public function __construct(Account $account)
     {
-        $this->user = $user;
+        $this->account = $account;
     }
 
     /**
-     * The function returns the User-entity of the event.
+     * The function returns the Account-entity of the event.
      *
-     * @return User
+     * @return Account
      */
-    public function getUser()
+    public function getAccount()
     {
-        return $this->user;
+        return $this->account;
     }
 }

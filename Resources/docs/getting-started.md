@@ -10,7 +10,7 @@
 
 ## Installation
 
-Run `composer req ftp/saas-bundle` to install the bundle. After that you have configure some vendor package settings.
+Run `composer req ftd/saas-bundle` to install the bundle. After that you have configure some vendor package settings.
 
 
 ### JWT

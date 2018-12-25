@@ -2,3 +2,6 @@ mail:
   subject:
     passwordForget: Passwort vergessen
     accountCreate: Account erstellt
+factory:
+  subscription:
+    name: Neuer Plan

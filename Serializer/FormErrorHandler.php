@@ -15,7 +15,7 @@ use JMS\Serializer\Handler\FormErrorHandler as JMSFormErrorsHandler;
 use JMS\Serializer\JsonSerializationVisitor;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * The class renders a different view for form-errors.

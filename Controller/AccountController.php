@@ -14,11 +14,12 @@ namespace FTD\SaasBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\Event\UserEvent;
 use FTD\SaasBundle\Form\AccountType;
 use FTD\SaasBundle\Form\PasswordResetType;
 use FTD\SaasBundle\FTDSaasBundleEvents;
-use FTD\SaasBundle\Manager\UserManager;
+use FTD\SaasBundle\Manager\AccountManager;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Util\TokenGenerator;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -46,9 +47,9 @@ class AccountController
     private $formFactory;
 
     /**
-     * @var UserManager
+     * @var AccountManager
      */
-    private $userManager;
+    private $accountManager;
 
     /**
      * @var EventDispatcherInterface
@@ -63,22 +64,22 @@ class AccountController
     /**
      * @param Authentication           $authentication
      * @param FormFactoryInterface     $formFactory
-     * @param UserManager              $userManager
+     * @param AccountManager           $accountManager
      * @param EventDispatcherInterface $eventDispatcher
-     * @param int                      $passwordResetTime
+     * @param int                      $settingsPasswordResetTime
      */
     public function __construct(
         Authentication $authentication,
         FormFactoryInterface $formFactory,
-        UserManager $userManager,
+        AccountManager $accountManager,
         EventDispatcherInterface $eventDispatcher,
-        int $passwordResetTime
+        int $settingsPasswordResetTime
     ) {
         $this->authentication = $authentication;
         $this->formFactory = $formFactory;
-        $this->userManager = $userManager;
+        $this->accountManager = $accountManager;
         $this->eventDispatcher = $eventDispatcher;
-        $this->passwordResetTime = $passwordResetTime;
+        $this->passwordResetTime = $settingsPasswordResetTime;
     }
 
     /**
@@ -93,15 +94,15 @@ class AccountController
      */
     public function postAccountAction(Request $request, JWTTokenManagerInterface $jwtManager)
     {
-        $user = $this->userManager->create();
-        $form = $this->formFactory->create(AccountType::class, $user);
+        $account = $this->accountManager->create();
+        $form = $this->formFactory->create(AccountType::class, $account);
 
         $form->submit($request->request->all());
         if ($form->isValid()) {
-            $this->userManager->update($user);
-            $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_CREATE, new UserEvent($user));
+            $this->accountManager->update($account);
+            $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_CREATE, new AccountEvent($account));
 
-            return View::create(['token' => $jwtManager->create($user)], Response::HTTP_CREATED);
+            return View::create(['token' => $jwtManager->create($account)], Response::HTTP_CREATED);
         }
 
         return View::create(['form' => $form], Response::HTTP_BAD_REQUEST);
@@ -125,7 +126,8 @@ class AccountController
         TokenGenerator $tokenGenerator,
         TranslatorInterface $translator
     ) {
-        $user = $this->userManager->findUserByUsernameOrEmail($request->query->get('usernameOrEmail'));
+        $user = $this->accountManager->getAccountByEmail($request->query->get('email'));
+
         if ($user instanceof User) {
             if (
                 !$user->getConfirmationRequestAt() instanceof \DateTime
@@ -136,7 +138,7 @@ class AccountController
                 $user->setConfirmationRequestAt(new \DateTime());
                 $user->setConfirmationToken($tokenGenerator->generateToken());
 
-                $this->userManager->update($user);
+                $this->accountManager->update($user);
                 $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET, new UserEvent($user));
 
                 return View::create([], Response::HTTP_CREATED);
@@ -164,9 +166,6 @@ class AccountController
      *
      * @return View
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
      * @Rest\Post("account/password")
      */
     public function postPasswordAction(
@@ -174,7 +173,7 @@ class AccountController
         JWTTokenManagerInterface $jwtManager,
         TranslatorInterface $translator
     ) {
-        $user = $this->userManager->getRepository()->findByConfirmationToken(
+        $user = $this->accountManager->getRepository()->findByConfirmationToken(
             $request->request->get('confirmationToken')
         );
         if (!$user instanceof User) {
@@ -190,7 +189,7 @@ class AccountController
         if ($form->isValid()) {
             $user->setConfirmationToken(null);
             $user->setConfirmationRequestAt(null);
-            $this->userManager->update($user);
+            $this->accountManager->update($user);
             $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_UPDATE, new UserEvent($user));
 
             return View::create(['token' => $jwtManager->create($user)], Response::HTTP_OK);

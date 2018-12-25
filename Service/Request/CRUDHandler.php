@@ -158,7 +158,7 @@ class CRUDHandler
             /*
              * @var ApiResource
              */
-            if (null === $entity->getId() && !$entity->checkUserCanCreate($this->authentication->getUser())) {
+            if (null === $entity->getId() && !$entity->checkUserCanCreate($this->authentication->getCurrentUser())) {
                 throw new AccessDeniedHttpException(
                     sprintf(
                         'User not able to create entity of class %s',
@@ -167,7 +167,7 @@ class CRUDHandler
                 );
             }
 
-            if (null !== $entity->getId() && !$entity->checkUserCanEdit($this->authentication->getUser())) {
+            if (null !== $entity->getId() && !$entity->checkUserCanEdit($this->authentication->getCurrentUser())) {
                 throw new AccessDeniedHttpException(
                     sprintf(
                         'User not able to edit %s with id %s',
@@ -211,7 +211,7 @@ class CRUDHandler
         string $eventName = '',
         Event $entityEvent = null
     ) {
-        if (!$entity->checkUserCanDelete($this->authentication->getUser())) {
+        if (!$entity->checkUserCanDelete($this->authentication->getCurrentUser())) {
             throw new AccessDeniedHttpException(
                 sprintf(
                     'User not able to remove %s with id %s',

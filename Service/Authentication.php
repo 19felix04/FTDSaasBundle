@@ -41,17 +41,17 @@ class Authentication
      *
      * @return User|null|object
      */
-    public function getUser()
+    public function getCurrentUser()
     {
         if (null === $token = $this->tokenStorage->getToken()) {
             return null;
         }
 
-        if (!is_object($user = $token->getUser())) {
+        if (!is_object($account = $token->getUser())) {
             return null;
         }
 
-        return $user;
+        return $account->getCurrentUser();
     }
 
     /**
@@ -61,8 +61,8 @@ class Authentication
      */
     public function getCurrentSubscription()
     {
-        if ($this->getUser() instanceof User) {
-            return $this->getUser()->getSubscription();
+        if ($this->getCurrentUser() instanceof User) {
+            return $this->getCurrentUser()->getSubscription();
         }
 
         return null;

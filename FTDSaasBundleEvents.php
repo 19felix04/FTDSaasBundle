@@ -34,12 +34,7 @@ final class FTDSaasBundleEvents
     const ACCOUNT_PASSWORD_UPDATE = 'ftd.saas_bundle.account.password_update';
 
     /**
-     * The event occurs when an user create an invitation.
+     * The event occurs when an user creates an other user.
      */
-    const INVITATION_CREATE = 'ftd.saas_bundle.invitation.create';
-
-    /**
-     * The event occurs when an user delete an invitation.
-     */
-    const INVITATION_DELETE = 'ftd.saas_bundle.invitation.delete';
+    const USER_CREATE = 'ftd.saas_bundle.user.create';
 }

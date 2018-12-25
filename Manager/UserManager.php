@@ -28,75 +28,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserManager extends BaseEntityManager
 {
     /**
-     * @var UserPasswordEncoderInterface
-     */
-    protected $userPasswordEncoder;
-
-    /**
-     * @param EntityManagerInterface       $entityManager
-     * @param Authentication               $authentication
-     * @param UserPasswordEncoderInterface $userPasswordEncoder
-     */
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        Authentication $authentication,
-        UserPasswordEncoderInterface $userPasswordEncoder
-    ) {
-        parent::__construct($entityManager, $authentication);
-        $this->userPasswordEncoder = $userPasswordEncoder;
-    }
-
-    /**
-     * The function removes the passing entity from database.
-     *
-     * @param mixed $entity
-     * @param bool  $flush
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function remove($entity, $flush = true)
-    {
-        $this->entityManager->remove($entity);
-        if ($flush) {
-            $this->entityManager->flush();
-        }
-    }
-
-    /**
      * @return User
      */
     public function create()
     {
         $user = new User();
-        $user->setEnabled(true);
-
+        $user->setSubscription($this->authentication->getCurrentSubscription());
         return $user;
-    }
-
-    /**
-     * The function saves the.
-     *
-     * @param User $user
-     * @param bool $flush
-     */
-    public function update($user, $flush = true)
-    {
-        if (null != $user->getPlainPassword()) {
-            $user->setPassword($this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword()));
-        }
-
-        parent::update($user, $flush);
-    }
-
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function findUserByUsernameOrEmail($query)
-    {
-        return $this->getRepository()->loadUserByUsername($query);
     }
 
     /**
@@ -105,5 +43,15 @@ class UserManager extends BaseEntityManager
     public function getClass()
     {
         return User::class;
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return User[]
+     */
+    public function getUsersByEmail(string $email)
+    {
+        return $this->getRepository()->findBy(['email' => $email]);
     }
 }

@@ -11,20 +11,23 @@
 
 namespace FTD\SaasBundle\Form;
 
-use FTD\SaasBundle\Entity\Account;
-use FTD\SaasBundle\Types\PasswordType;
+use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Types\User\SubscriptionConnectionConstraint;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * The form class to for creating a new account (User-entity).
+ * The form class to for creating a new user.
  *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class AccountType extends BaseType
+class UserType extends BaseType
 {
     /**
      * {@inheritdoc}
@@ -32,14 +35,16 @@ class AccountType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', TextType::class, [
-                'constraints' => [
-                    new NotBlank()
-                ],
-            ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('username', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
+                    new Length(['min' => 4])
+                ],
+            ])
+            ->add('email', EmailType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Email(),
                 ],
             ])
         ;
@@ -51,9 +56,16 @@ class AccountType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefault('data_class', Account::class);
+        $resolver->setDefault('data_class', User::class);
         $resolver->setDefault('constraints', [
-            new UniqueEntity(['email'])
+            new UniqueEntity([
+                'fields' => ['subscription', 'email'],
+                'errorPath' => 'email'
+            ]),
+            new UniqueEntity([
+                'fields' => ['subscription', 'username'],
+                'errorPath' => 'username'
+            ])
         ]);
     }
 }
