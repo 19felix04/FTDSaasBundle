@@ -11,12 +11,8 @@
 
 namespace FTD\SaasBundle\Manager;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use FTD\SaasBundle\Entity\User;
 use FTD\SaasBundle\Repository\UserRepository;
-use FTD\SaasBundle\Service\Authentication;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * The class UserManager manage the updating and finding of an user entity.
@@ -34,7 +30,7 @@ class UserManager extends BaseEntityManager
     {
         $user = new User();
 
-        if(($subscription = $this->authentication->getCurrentSubscription()) !== null) {
+        if (null !== ($subscription = $this->authentication->getCurrentSubscription())) {
             $user->setSubscription($this->authentication->getCurrentSubscription());
         }
 

@@ -11,12 +11,9 @@
 
 namespace FTD\SaasBundle\Manager;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
+use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Entity\Subscription;
 use FTD\SaasBundle\Repository\SubscriptionRepository;
-use FTD\SaasBundle\Service\Authentication;
-use Symfony\Component\Security\Core\Encoder\SubscriptionPasswordEncoderInterface;
 
 /**
  * The class SubscriptionManager manage the updating and finding of an subscription entity.
@@ -33,6 +30,7 @@ class SubscriptionManager extends BaseEntityManager
     public function create()
     {
         $subscription = new Subscription();
+
         return $subscription;
     }
 
@@ -42,5 +40,15 @@ class SubscriptionManager extends BaseEntityManager
     public function getClass()
     {
         return Subscription::class;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return Subscription[]
+     */
+    public function getByAccount(Account $account)
+    {
+        return $this->getRepository()->findByAccount($account);
     }
 }

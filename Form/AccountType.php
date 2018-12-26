@@ -34,7 +34,7 @@ class AccountType extends BaseType
         $builder
             ->add('email', TextType::class, [
                 'constraints' => [
-                    new NotBlank()
+                    new NotBlank(),
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -53,7 +53,7 @@ class AccountType extends BaseType
         parent::configureOptions($resolver);
         $resolver->setDefault('data_class', Account::class);
         $resolver->setDefault('constraints', [
-            new UniqueEntity(['email'])
+            new UniqueEntity(['email']),
         ]);
     }
 }

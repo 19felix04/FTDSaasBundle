@@ -59,7 +59,7 @@ class ApiResourceSubscriptionListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->apiResourceSubscriptionListener = new ApiResourceSubscriptionListener($this->authentication, false);
-        $this->assertSame(['postUpdate', 'postPersist'], $this->apiResourceSubscriptionListener->getSubscribedEvents());
+        $this->assertSame(['preUpdate', 'prePersist'], $this->apiResourceSubscriptionListener->getSubscribedEvents());
     }
 
     public function testNotSoftwareAsAServicePostUpdate()
@@ -67,7 +67,7 @@ class ApiResourceSubscriptionListenerTest extends TestCase
         $apiResource = new TestApiResource();
         $this->apiResourceSubscriptionListener = new ApiResourceSubscriptionListener($this->authentication, false);
 
-        $this->apiResourceSubscriptionListener->postUpdate(new LifecycleEventArgs(
+        $this->apiResourceSubscriptionListener->preUpdate(new LifecycleEventArgs(
             $apiResource, $this->objectManager
         ));
 
@@ -82,7 +82,7 @@ class ApiResourceSubscriptionListenerTest extends TestCase
             true
         );
 
-        $this->apiResourceSubscriptionListener->postUpdate(new LifecycleEventArgs(
+        $this->apiResourceSubscriptionListener->preUpdate(new LifecycleEventArgs(
             $apiResource, $this->objectManager
         ));
 

@@ -12,7 +12,6 @@
 namespace FTD\SaasBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use FTD\SaasBundle\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

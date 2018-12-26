@@ -11,22 +11,19 @@
 
 namespace FTD\SaasBundle\Form;
 
-use FTD\SaasBundle\Entity\User;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use FTD\SaasBundle\Entity\Subscription;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * The form class to for creating a new user.
+ * The form class to for creating a new subscription.
  *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class UserType extends BaseType
+class SubscriptionType extends BaseType
 {
     /**
      * {@inheritdoc}
@@ -34,16 +31,10 @@ class UserType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
+            ->add('name', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new Length(['min' => 4]),
-                ],
-            ])
-            ->add('email', EmailType::class, [
-                'constraints' => [
-                    new NotBlank(),
-                    new Email(),
                 ],
             ])
         ;
@@ -55,16 +46,6 @@ class UserType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefault('data_class', User::class);
-        $resolver->setDefault('constraints', [
-            new UniqueEntity([
-                'fields' => ['subscription', 'email'],
-                'errorPath' => 'email',
-            ]),
-            new UniqueEntity([
-                'fields' => ['subscription', 'username'],
-                'errorPath' => 'username',
-            ]),
-        ]);
+        $resolver->setDefault('data_class', Subscription::class);
     }
 }

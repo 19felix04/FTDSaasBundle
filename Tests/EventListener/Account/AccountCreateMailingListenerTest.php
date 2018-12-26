@@ -9,20 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace FTD\SaasBundle\Tests\EventListener;
+namespace FTD\SaasBundle\Tests\EventListener\Account;
 
-use FTD\SaasBundle\Event\UserEvent;
-use FTD\SaasBundle\EventListener\PasswordForgetMailingListener;
+use FTD\SaasBundle\Entity\Account;
+use FTD\SaasBundle\Event\AccountEvent;
+use FTD\SaasBundle\EventListener\Account\AccountCreateMailingListener;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Service\Mailer;
-use FTD\SaasBundle\Tests\TestUser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class PasswordForgetMailingListenerTest extends TestCase
+class AccountCreateMailingListenerTest extends TestCase
 {
     /**
      * @var TranslatorInterface
@@ -51,28 +51,27 @@ class PasswordForgetMailingListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertArraySubset(
-            [FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET => 'sendPasswordForgetMail'],
-            PasswordForgetMailingListener::getSubscribedEvents()
+            [FTDSaasBundleEvents::ACCOUNT_CREATE => 'sendAccountCreateMail'],
+            AccountCreateMailingListener::getSubscribedEvents()
         );
-        $this->assertSame(1, $this->count(PasswordForgetMailingListener::getSubscribedEvents()));
+        $this->assertSame(1, count(AccountCreateMailingListener::getSubscribedEvents()));
     }
 
-    public function testSendPasswordForgetMail()
+    public function testSendAccountCreateMail()
     {
-        $user = new TestUser();
-        $user->setEmail('test@local.de');
-        $user->setId(45);
+        $account = new Account();
+        $account->setEmail('test@local.de');
 
         $this->mailer = $this->createMock(Mailer::class);
         $this->mailer->expects($this->once())->method('sendMail')->willReturn(true);
 
-        $passwordForgetMailingListener = new PasswordForgetMailingListener(
+        $accountCreatingMailingListener = new AccountCreateMailingListener(
             $this->mailer,
             $this->twigEnvironment,
             $this->translator,
-            'passwordForgetTemplate'
+            'template.html.twig'
         );
 
-        $this->assertTrue($passwordForgetMailingListener->sendPasswordForgetMail(new UserEvent($user)));
+        $this->assertTrue($accountCreatingMailingListener->sendAccountCreateMail(new AccountEvent($account)));
     }
 }

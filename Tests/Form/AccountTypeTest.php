@@ -11,7 +11,7 @@
 
 namespace FTD\SaasBundle\Form;
 
-use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Tests\Form\ValidatorExtensionTypeTestCase;
 
 /**
@@ -21,24 +21,21 @@ class AccountTypeTest extends ValidatorExtensionTypeTestCase
 {
     public function testSubmitValidData()
     {
-        $user = new User();
-        $user->setUsername('hans.zimmer');
-        $user->setEmail('hans.zimmer@local.de');
-        $user->setPlainPassword('hans.zimmer');
+        $account = new Account();
+        $account->setEmail('hans.zimmer@local.de');
+        $account->setPlainPassword('hans.zimmer');
 
         $formData = [
-            'username' => 'hans.zimmer',
             'email' => 'hans.zimmer@local.de',
             'plainPassword' => 'hans.zimmer',
         ];
 
-        $objectToCompare = new User();
+        $objectToCompare = new Account();
         $form = $this->factory->create(AccountType::class, $objectToCompare);
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
         $this->assertTrue($form->isValid());
-        $this->assertSame($user->getUsername(), $objectToCompare->getUsername());
-        $this->assertSame($user->getEmail(), $objectToCompare->getEmail());
+        $this->assertSame($account->getEmail(), $objectToCompare->getEmail());
     }
 }

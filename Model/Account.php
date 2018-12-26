@@ -1,10 +1,19 @@
 <?php
 
+/*
+ * This file is part of the FTDSaasBundle package.
+ *
+ * (c) Felix Niedballa <https://felixniedballa.de/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FTD\SaasBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as JMS;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * The Account-class is the main context to secure the application via UserInterface.
@@ -73,7 +82,7 @@ abstract class Account implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getPassword() :string
+    public function getPassword(): string
     {
         return $this->password;
     }

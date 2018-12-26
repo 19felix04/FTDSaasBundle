@@ -13,7 +13,9 @@ namespace FTD\Tests\Controller;
 
 use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Controller\UserController;
+use FTD\SaasBundle\Manager\UserManager;
 use FTD\SaasBundle\Service\Authentication;
+use FTD\SaasBundle\Service\Request\CRUDHandler;
 use FTD\SaasBundle\Tests\TestUser;
 use PHPUnit\Framework\TestCase;
 
@@ -25,9 +27,14 @@ class UserControllerTest extends TestCase
     private $authentication;
 
     /**
-     * @var UserController
+     * @var CRUDHandler
      */
-    private $userController;
+    private $crudHandler;
+
+    /**
+     * @var UserManager
+     */
+    private $userManager;
 
     /**
      * {@inheritdoc}
@@ -38,14 +45,25 @@ class UserControllerTest extends TestCase
         $user->setId(10);
         $user->setUsername('test.user');
         $this->authentication = $this->createMock(Authentication::class);
-        $this->authentication->method('getUser')->willReturn($user);
+        $this->authentication->method('getCurrentUser')->willReturn($user);
 
-        $this->userController = new UserController($this->authentication);
+        $this->crudHandler = $this->createMock(CRUDHandler::class);
+        $this->userManager = $this->createMock(UserManager::class);
     }
 
     public function testGetMeAction()
     {
-        $this->assertSame(View::class, get_class($this->userController->getMeAction()));
-        $this->assertArrayHasKey('user', $this->userController->getMeAction()->getData());
+        $userController = new UserController($this->authentication, $this->crudHandler, $this->userManager, true);
+
+        $this->assertSame(View::class, get_class($userController->getMeAction()));
+        $this->assertArrayHasKey('user', $userController->getMeAction()->getData());
+    }
+
+    public function testPostMeActionNotSoftwareAsAService()
+    {
+        $userController = new UserController($this->authentication, $this->crudHandler, $this->userManager, false);
+
+        $this->assertSame(View::class, get_class($userController->postMeAction()));
+        $this->assertSame(404, $userController->postMeAction()->getStatusCode());
     }
 }

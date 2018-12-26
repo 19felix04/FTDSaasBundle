@@ -11,7 +11,7 @@
 
 namespace FTD\SaasBundle\Form;
 
-use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Tests\Form\ValidatorExtensionTypeTestCase;
 
 /**
@@ -21,20 +21,19 @@ class PasswordResetTypeTest extends ValidatorExtensionTypeTestCase
 {
     public function testSubmitValidData()
     {
-        $user = new User();
-        $user->setPlainPassword('hans.zimmer');
+        $account = new Account();
+        $account->setPlainPassword('hans.zimmer');
 
         $formData = [
             'plainPassword' => 'hans.zimmer',
         ];
 
-        $objectToCompare = new User();
+        $objectToCompare = new Account();
         $form = $this->factory->create(PasswordResetType::class, $objectToCompare);
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());
         $this->assertTrue($form->isValid());
-        $this->assertSame($user->getUsername(), $objectToCompare->getUsername());
-        $this->assertSame($user->getEmail(), $objectToCompare->getEmail());
+        $this->assertSame($account->getEmail(), $objectToCompare->getEmail());
     }
 }

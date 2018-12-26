@@ -12,7 +12,6 @@
 namespace FTD\SaasBundle\EventListener\Account;
 
 use FTD\SaasBundle\Event\AccountEvent;
-use FTD\SaasBundle\Event\UserEvent;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Service\Mailer;
@@ -75,7 +74,8 @@ class AccountCreateMailingListener implements EventSubscriberInterface
 
     /**
      * @param AccountEvent $accountEvent
-     * @return bool If a mail is send true will returned.
+     *
+     * @return bool if a mail is send true will returned
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime

@@ -16,7 +16,6 @@ use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Entity\User;
 use FTD\SaasBundle\Event\AccountEvent;
-use FTD\SaasBundle\Event\UserEvent;
 use FTD\SaasBundle\Form\AccountType;
 use FTD\SaasBundle\Form\PasswordResetType;
 use FTD\SaasBundle\FTDSaasBundleEvents;

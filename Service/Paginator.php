@@ -64,7 +64,7 @@ class Paginator
             'results' => $this->getResults($queryBuilder, $this->getCurrentPage()),
             'pages' => $this->getMaxPages($queryBuilder),
             'currentPage' => $this->getCurrentPage(),
-            'query' => $queryBuilder->getQuery()->getDQL()
+            'query' => $queryBuilder->getQuery()->getDQL(),
         ];
 
         return $paginationData;

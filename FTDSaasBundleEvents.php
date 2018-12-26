@@ -37,4 +37,9 @@ final class FTDSaasBundleEvents
      * The event occurs when an user creates an other user.
      */
     const USER_CREATE = 'ftd.saas_bundle.user.create';
+
+    /**
+     * The event occurs when an user creates an new subscription.
+     */
+    const SUBSCRIPTION_CREATE = 'ftd.saas_bundle.subscription.create';
 }

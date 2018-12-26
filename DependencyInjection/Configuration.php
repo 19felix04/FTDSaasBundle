@@ -35,8 +35,6 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->integerNode('passwordResetTime')->defaultValue(216000)->end()
                         ->booleanNode('softwareAsAService')->defaultValue(true)->end()
-                        ->booleanNode('createUserAutomatically')->defaultValue(true)->end()
-                        ->booleanNode('createSubscriptionAutomatically')->defaultValue(true)->end()
                     ->end()
                 ->end()
                 ->arrayNode('mailer')

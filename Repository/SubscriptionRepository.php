@@ -13,6 +13,7 @@ namespace FTD\SaasBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Entity\Subscription;
 
 /**
@@ -26,5 +27,32 @@ class SubscriptionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Subscription::class);
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilderFindByAccount(Account $account)
+    {
+        $qb = $this->createQueryBuilder('subscription');
+        $qb->select('subscription')
+            ->leftJoin('subscription.users', 'user')
+            ->leftJoin('user.account', 'account')
+            ->where($qb->expr()->eq('account.id', $account->getId()))
+        ;
+
+        return $qb;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return Subscription[]
+     */
+    public function findByAccount(Account $account)
+    {
+        return $this->getQueryBuilderFindByAccount($account)->getQuery()->getResult();
     }
 }

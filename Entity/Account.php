@@ -12,9 +12,9 @@
 namespace FTD\SaasBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use FTD\SaasBundle\Model\Account as BaseAccount;
 use JMS\Serializer\Annotation as JMS;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
