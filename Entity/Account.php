@@ -140,4 +140,44 @@ class Account extends BaseAccount
     {
         $this->currentUser = $currentUser;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * @param string|null $confirmationToken
+     *
+     * @return self
+     */
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getConfirmationRequestAt()
+    {
+        return $this->confirmationRequestAt;
+    }
+
+    /**
+     * @param \DateTime|null $confirmationRequestAt
+     *
+     * @return self
+     */
+    public function setConfirmationRequestAt(?\DateTime $confirmationRequestAt): self
+    {
+        $this->confirmationRequestAt = $confirmationRequestAt;
+
+        return $this;
+    }
 }

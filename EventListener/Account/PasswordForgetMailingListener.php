@@ -11,13 +11,12 @@
 
 namespace FTD\SaasBundle\EventListener\Account;
 
-use FTD\SaasBundle\Event\UserEvent;
+use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Service\Mailer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Error\Error;
 
 /**
  * The class listen to events and sends the password reset mail.
@@ -79,29 +78,29 @@ class PasswordForgetMailingListener implements EventSubscriberInterface
     }
 
     /**
-     * @param UserEvent $userEvent
+     * @param \FTD\SaasBundle\Event\AccountEvent $accountEvent
+     *
+     * @return bool If a mail is send true will returned.
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     *
-     * @return bool
      */
-    public function sendPasswordForgetMail(UserEvent $userEvent)
+    public function sendPasswordForgetMail(AccountEvent $accountEvent)
     {
         if (
             0 === strlen($this->templatePasswordForget)
             || 'false' === $this->templatePasswordForget
         ) {
-            return;
+            return false;
         }
 
         $content = $this->twigEnvironment->render(
-            $this->templatePasswordForget, ['user' => $userEvent->getUser()]
+            $this->templatePasswordForget, ['account' => $accountEvent->getAccount()]
         );
 
         return (bool) $this->mailer->sendMail(
-            $userEvent->getUser()->getEmail(),
+            $accountEvent->getAccount()->getEmail(),
             $this->translator->trans('mail.subject.passwordForget', [], 'ftd_saas'),
             $content
         );

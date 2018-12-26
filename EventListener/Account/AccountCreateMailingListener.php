@@ -75,6 +75,7 @@ class AccountCreateMailingListener implements EventSubscriberInterface
 
     /**
      * @param AccountEvent $accountEvent
+     * @return bool If a mail is send true will returned.
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
@@ -88,14 +89,14 @@ class AccountCreateMailingListener implements EventSubscriberInterface
             0 === strlen($this->templateAccountCreate)
             || 'false' === $this->templateAccountCreate
         ) {
-            return;
+            return false;
         }
 
         $content = $this->twigEnvironment->render(
             $this->templateAccountCreate, ['account' => $accountEvent->getAccount()]
         );
 
-        return $this->mailer->sendMail(
+        return (bool) $this->mailer->sendMail(
             $accountEvent->getAccount()->getEmail(),
             $this->translator->trans('mail.subject.accountCreate', [], 'ftd_saas'),
             $content

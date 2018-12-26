@@ -71,9 +71,9 @@ class User extends BaseUser
     }
 
     /**
-     * @return Subscription
+     * @return null|Subscription
      */
-    public function getSubscription(): Subscription
+    public function getSubscription(): ?Subscription
     {
         return $this->subscription;
     }

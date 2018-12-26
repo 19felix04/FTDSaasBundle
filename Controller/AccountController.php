@@ -13,6 +13,7 @@ namespace FTD\SaasBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Entity\User;
 use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\Event\UserEvent;
@@ -126,32 +127,36 @@ class AccountController
         TokenGenerator $tokenGenerator,
         TranslatorInterface $translator
     ) {
-        $user = $this->accountManager->getAccountByEmail($request->query->get('email'));
+        $account = $this->accountManager->getAccountByEmail($request->query->get('email'));
 
-        if ($user instanceof User) {
+        if ($account instanceof Account) {
             if (
-                !$user->getConfirmationRequestAt() instanceof \DateTime
-                || $user->getConfirmationRequestAt() < new \DateTime(
+                !$account->getConfirmationRequestAt() instanceof \DateTime
+                || $account->getConfirmationRequestAt() < new \DateTime(
                     sprintf('now - %s seconds', $this->passwordResetTime)
                 )
             ) {
-                $user->setConfirmationRequestAt(new \DateTime());
-                $user->setConfirmationToken($tokenGenerator->generateToken());
+                $account->setConfirmationRequestAt(new \DateTime());
+                $account->setConfirmationToken($tokenGenerator->generateToken());
 
-                $this->accountManager->update($user);
-                $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET, new UserEvent($user));
+                $this->accountManager->update($account);
+                $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET, new AccountEvent($account));
 
                 return View::create([], Response::HTTP_CREATED);
             }
 
             return View::create(
-                ['error' => $translator->trans('error.accountPasswordDelete.notEnoughTimeAgo')],
+                ['error' => $translator->trans(
+                    'error.accountPasswordDelete.notEnoughTimeAgo',
+                    ['passwordResetTimeInMinutes' => $this->passwordResetTime / 60],
+                    'ftd_saas'
+                )],
                 Response::HTTP_BAD_REQUEST
             );
         }
 
         return View::create(
-            ['error' => $translator->trans('error.accountPasswordDelete.accountNotFound')],
+            ['errors' => [$translator->trans('error.accountPasswordDelete.accountNotFound', [], 'ftd_saas')]],
             Response::HTTP_NOT_FOUND
         );
     }
@@ -173,26 +178,29 @@ class AccountController
         JWTTokenManagerInterface $jwtManager,
         TranslatorInterface $translator
     ) {
-        $user = $this->accountManager->getRepository()->findByConfirmationToken(
+        $account = $this->accountManager->getRepository()->findByConfirmationToken(
             $request->request->get('confirmationToken')
         );
-        if (!$user instanceof User) {
+        if (!$account instanceof Account) {
             return View::create(
-                ['errors' => $translator->trans('error.accountPasswordPost.noValidConfirmationToken')],
+                ['errors' => [$translator->trans('error.accountPasswordPost.noValidConfirmationToken', [], 'ftd_saas')]],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        $form = $this->formFactory->create(PasswordResetType::class, $user);
+        $form = $this->formFactory->create(PasswordResetType::class, $account);
         $form->submit($request->request->all());
 
         if ($form->isValid()) {
-            $user->setConfirmationToken(null);
-            $user->setConfirmationRequestAt(null);
-            $this->accountManager->update($user);
-            $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_UPDATE, new UserEvent($user));
+            $account->setConfirmationToken(null);
+            $account->setConfirmationRequestAt(null);
+            $this->accountManager->update($account);
+            $this->eventDispatcher->dispatch(
+                FTDSaasBundleEvents::ACCOUNT_PASSWORD_UPDATE,
+                new AccountEvent($account)
+            );
 
-            return View::create(['token' => $jwtManager->create($user)], Response::HTTP_OK);
+            return View::create(['token' => $jwtManager->create($account)], Response::HTTP_OK);
         }
 
         return View::create(['form' => $form], Response::HTTP_BAD_REQUEST);

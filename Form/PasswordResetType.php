@@ -11,7 +11,7 @@
 
 namespace FTD\SaasBundle\Form;
 
-use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Types\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,6 +39,6 @@ class PasswordResetType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefault('data_class', User::class);
+        $resolver->setDefault('data_class', Account::class);
     }
 }

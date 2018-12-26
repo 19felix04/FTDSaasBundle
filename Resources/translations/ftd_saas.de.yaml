@@ -5,3 +5,9 @@ mail:
 factory:
   subscription:
     name: Neuer Plan
+error:
+  accountPasswordDelete:
+    notEnoughTimeAgo: Zwischen dem Zurücksetzen eines Passwortes müssen passwordResetTimeInMinutes Minuten liegen.
+    accountNotFound: Zu der E-Mail wurde kein Account gefunden.
+  accountPasswordPost:
+    noValidConfirmationToken: Kein valider Link zum Zurücksetzen des Passwortes.

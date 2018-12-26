@@ -33,7 +33,11 @@ class UserManager extends BaseEntityManager
     public function create()
     {
         $user = new User();
-        $user->setSubscription($this->authentication->getCurrentSubscription());
+
+        if(($subscription = $this->authentication->getCurrentSubscription()) !== null) {
+            $user->setSubscription($this->authentication->getCurrentSubscription());
+        }
+
         return $user;
     }
 

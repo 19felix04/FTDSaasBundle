@@ -11,6 +11,7 @@
 
 namespace FTD\SaasBundle\Service;
 
+use FTD\SaasBundle\Entity\Subscription;
 use FTD\SaasBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -59,7 +60,7 @@ class Authentication
      *
      * @return \FTD\SaasBundle\Entity\Subscription|null
      */
-    public function getCurrentSubscription()
+    public function getCurrentSubscription() :?Subscription
     {
         if ($this->getCurrentUser() instanceof User) {
             return $this->getCurrentUser()->getSubscription();

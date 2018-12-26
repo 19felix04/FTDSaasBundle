@@ -23,6 +23,11 @@ class AccountConnectionListener implements EventSubscriberInterface
     private $accountManager;
 
     /**
+     * @var bool $settingsSoftwareAsAService
+     */
+    private $settingsSoftwareAsAService;
+
+    /**
      * @var UserManager
      */
     private $userManager;
@@ -40,16 +45,19 @@ class AccountConnectionListener implements EventSubscriberInterface
     /**
      * @param AccountManager      $accountManager
      * @param SubscriptionManager $subscriptionManager
+     * @param bool                $settingsSoftwareAsAService
      * @param TranslatorInterface $translator
      * @param UserManager         $userManager
      */
     public function __construct(
         AccountManager $accountManager,
         SubscriptionManager $subscriptionManager,
+        bool $settingsSoftwareAsAService,
         TranslatorInterface $translator,
         UserManager $userManager
     ) {
         $this->accountManager = $accountManager;
+        $this->settingsSoftwareAsAService = $settingsSoftwareAsAService;
         $this->subscriptionManager = $subscriptionManager;
         $this->translator = $translator;
         $this->userManager = $userManager;
@@ -91,20 +99,20 @@ class AccountConnectionListener implements EventSubscriberInterface
             return;
         }
 
-        $subscription = $this->subscriptionManager->create();
-        $subscription->setName($this->translator->trans('factory.subscription.name', [], 'ftd_saas'));
-
         $user = $this->userManager->create();
         $user->setUsername($account->getEmail());
         $user->setEmail($account->getEmail());
         $user->setLastActivityAt(new \DateTime());
-        $user->setSubscription($subscription);
         $user->setAccount($account);
 
         $account->setCurrentUser($user);
         $this->userManager->update($user);
 
-        $subscription->addUser($user);
-        $this->subscriptionManager->update($subscription);
+        if($this->settingsSoftwareAsAService === true) {
+            $subscription = $this->subscriptionManager->create();
+            $subscription->setName($this->translator->trans('factory.subscription.name', [], 'ftd_saas'));
+            $subscription->addUser($user);
+            $this->subscriptionManager->update($subscription);
+        }
     }
 }

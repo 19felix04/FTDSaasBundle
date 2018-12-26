@@ -34,7 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->integerNode('passwordResetTime')->defaultValue(216000)->end()
-                        ->integerNode('softwareAsAService')->defaultValue(true)->end()
+                        ->booleanNode('softwareAsAService')->defaultValue(true)->end()
                     ->end()
                 ->end()
                 ->arrayNode('mailer')

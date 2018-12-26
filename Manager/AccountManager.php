@@ -57,7 +57,7 @@ class AccountManager extends BaseEntityManager
      */
     public function getAccountByEmail($email)
     {
-        return $this->getRepository()->findByEmail($email);
+        return $this->getRepository()->findOneBy(['email' => $email]);
     }
 
     /**
