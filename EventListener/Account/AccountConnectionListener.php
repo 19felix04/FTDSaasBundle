@@ -28,6 +28,16 @@ class AccountConnectionListener implements EventSubscriberInterface
     private $settingsSoftwareAsAService;
 
     /**
+     * @var bool
+     */
+    private $settingsCreateUserAutomatically;
+
+    /**
+     * @var bool
+     */
+    private $settingsCreateSubscriptionAutomatically;
+
+    /**
      * @var UserManager
      */
     private $userManager;
@@ -45,6 +55,8 @@ class AccountConnectionListener implements EventSubscriberInterface
     /**
      * @param AccountManager      $accountManager
      * @param SubscriptionManager $subscriptionManager
+     * @param bool                $settingsCreateUserAutomatically
+     * @param bool                $settingsCreateSubscriptionAutomatically
      * @param bool                $settingsSoftwareAsAService
      * @param TranslatorInterface $translator
      * @param UserManager         $userManager
@@ -52,11 +64,15 @@ class AccountConnectionListener implements EventSubscriberInterface
     public function __construct(
         AccountManager $accountManager,
         SubscriptionManager $subscriptionManager,
+        bool $settingsCreateUserAutomatically,
+        bool $settingsCreateSubscriptionAutomatically,
         bool $settingsSoftwareAsAService,
         TranslatorInterface $translator,
         UserManager $userManager
     ) {
         $this->accountManager = $accountManager;
+        $this->settingsCreateUserAutomatically = $settingsCreateUserAutomatically;
+        $this->settingsCreateSubscriptionAutomatically = $settingsCreateSubscriptionAutomatically;
         $this->settingsSoftwareAsAService = $settingsSoftwareAsAService;
         $this->subscriptionManager = $subscriptionManager;
         $this->translator = $translator;
@@ -99,20 +115,25 @@ class AccountConnectionListener implements EventSubscriberInterface
             return;
         }
 
-        $user = $this->userManager->create();
-        $user->setUsername($account->getEmail());
-        $user->setEmail($account->getEmail());
-        $user->setLastActivityAt(new \DateTime());
-        $user->setAccount($account);
+        if ($this->settingsCreateUserAutomatically) {
+            $user = $this->userManager->create();
+            $user->setUsername($account->getEmail());
+            $user->setEmail($account->getEmail());
+            $user->setLastActivityAt(new \DateTime());
+            $user->setAccount($account);
 
-        $account->setCurrentUser($user);
-        $this->userManager->update($user);
+            $account->setCurrentUser($user);
+            $this->userManager->update($user);
 
-        if($this->settingsSoftwareAsAService === true) {
-            $subscription = $this->subscriptionManager->create();
-            $subscription->setName($this->translator->trans('factory.subscription.name', [], 'ftd_saas'));
-            $subscription->addUser($user);
-            $this->subscriptionManager->update($subscription);
+            if (
+                $this->settingsSoftwareAsAService === true
+                && $this->settingsCreateSubscriptionAutomatically
+            ) {
+                $subscription = $this->subscriptionManager->create();
+                $subscription->setName($this->translator->trans('factory.subscription.name', [], 'ftd_saas'));
+                $subscription->addUser($user);
+                $this->subscriptionManager->update($subscription);
+            }
         }
     }
 }

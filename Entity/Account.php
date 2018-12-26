@@ -126,17 +126,17 @@ class Account extends BaseAccount
     }
 
     /**
-     * @return User
+     * @return null|User
      */
-    public function getCurrentUser(): User
+    public function getCurrentUser(): ?User
     {
         return $this->currentUser;
     }
 
     /**
-     * @param User $currentUser
+     * @param User|null $currentUser
      */
-    public function setCurrentUser(User $currentUser): void
+    public function setCurrentUser(?User $currentUser): void
     {
         $this->currentUser = $currentUser;
     }

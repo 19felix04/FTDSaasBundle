@@ -67,7 +67,10 @@ class UserController
      */
     public function getMeAction()
     {
-        return View::create(['user' => $this->authentication->getCurrentUser()]);
+        if(($user = $this->authentication->getCurrentUser()) instanceof User) {
+            return View::create(['user' => $this->authentication->getCurrentUser()]);
+        }
+        return View::create([], Response::HTTP_NOT_FOUND);
     }
 
     /**

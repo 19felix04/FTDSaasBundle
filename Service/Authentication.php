@@ -42,7 +42,7 @@ class Authentication
      *
      * @return User|null|object
      */
-    public function getCurrentUser()
+    public function getCurrentUser() :?User
     {
         if (null === $token = $this->tokenStorage->getToken()) {
             return null;
