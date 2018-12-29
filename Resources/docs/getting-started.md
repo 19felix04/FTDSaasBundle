@@ -32,14 +32,14 @@ You have to define an encoder, provider, firewall and access_controll.
 ```yaml
 security:
     encoders:
-        FTD\SaasBundle\Entity\User:
+        FTD\SaasBundle\Entity\Account:
             algorithm: bcrypt
 
     providers:
         entity_provider:
             entity:
-                class: FTD\SaasBundle\Entity\User
-                property: username
+                class: FTD\SaasBundle\Entity\Account
+                property: email
 
     firewalls:
         dev:
