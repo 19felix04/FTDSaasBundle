@@ -14,12 +14,10 @@ namespace FTD\SaasBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Entity\Account;
-use FTD\SaasBundle\Entity\User;
 use FTD\SaasBundle\Event\AccountEvent;
-use FTD\SaasBundle\Form\AccountType;
 use FTD\SaasBundle\Form\PasswordResetType;
 use FTD\SaasBundle\FTDSaasBundleEvents;
-use FTD\SaasBundle\Manager\AccountManager;
+use FTD\SaasBundle\Manager\AccountManagerInterface;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Util\TokenGenerator;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -47,7 +45,7 @@ class AccountController
     private $formFactory;
 
     /**
-     * @var AccountManager
+     * @var AccountManagerInterface
      */
     private $accountManager;
 
@@ -59,26 +57,34 @@ class AccountController
     /**
      * @var string
      */
+    private $accountTypeClass;
+
+    /**
+     * @var int
+     */
     private $passwordResetTime;
 
     /**
      * @param Authentication           $authentication
      * @param FormFactoryInterface     $formFactory
-     * @param AccountManager           $accountManager
+     * @param AccountManagerInterface  $accountManager
      * @param EventDispatcherInterface $eventDispatcher
+     * @param string                   $accountTypeClass
      * @param int                      $settingsPasswordResetTime
      */
     public function __construct(
         Authentication $authentication,
         FormFactoryInterface $formFactory,
-        AccountManager $accountManager,
+        AccountManagerInterface $accountManager,
         EventDispatcherInterface $eventDispatcher,
+        string $accountTypeClass,
         int $settingsPasswordResetTime
     ) {
         $this->authentication = $authentication;
         $this->formFactory = $formFactory;
         $this->accountManager = $accountManager;
         $this->eventDispatcher = $eventDispatcher;
+        $this->accountTypeClass = $accountTypeClass;
         $this->passwordResetTime = $settingsPasswordResetTime;
     }
 
@@ -95,7 +101,7 @@ class AccountController
     public function postAccountAction(Request $request, JWTTokenManagerInterface $jwtManager)
     {
         $account = $this->accountManager->create();
-        $form = $this->formFactory->create(AccountType::class, $account);
+        $form = $this->formFactory->create($this->accountTypeClass, $account);
 
         $form->submit($request->request->all());
         if ($form->isValid()) {
@@ -139,7 +145,9 @@ class AccountController
                 $account->setConfirmationToken($tokenGenerator->generateToken());
 
                 $this->accountManager->update($account);
-                $this->eventDispatcher->dispatch(FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET, new AccountEvent($account));
+                $this->eventDispatcher->dispatch(
+                    FTDSaasBundleEvents::ACCOUNT_PASSWORD_RESET, new AccountEvent($account)
+                );
 
                 return View::create([], Response::HTTP_CREATED);
             }
@@ -182,7 +190,9 @@ class AccountController
         );
         if (!$account instanceof Account) {
             return View::create(
-                ['errors' => [$translator->trans('error.accountPasswordPost.noValidConfirmationToken', [], 'ftd_saas')]],
+                ['errors' => [$translator->trans(
+                    'error.accountPasswordPost.noValidConfirmationToken', [], 'ftd_saas'
+                )]],
                 Response::HTTP_NOT_FOUND
             );
         }

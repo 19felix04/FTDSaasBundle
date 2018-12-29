@@ -13,8 +13,8 @@ namespace FTD\SaasBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FTD\SaasBundle\Entity\Account;
-use FTD\SaasBundle\Entity\Subscription;
+use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
 
 /**
  * @method Subscription|null find($id, $lockMode = null, $lockVersion = null)

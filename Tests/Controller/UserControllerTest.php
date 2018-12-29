@@ -13,6 +13,7 @@ namespace FTD\Tests\Controller;
 
 use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Controller\UserController;
+use FTD\SaasBundle\Form\UserType;
 use FTD\SaasBundle\Manager\UserManager;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Service\Request\CRUDHandler;
@@ -53,7 +54,7 @@ class UserControllerTest extends TestCase
 
     public function testGetMeAction()
     {
-        $userController = new UserController($this->authentication, $this->crudHandler, $this->userManager, true);
+        $userController = new UserController($this->authentication, $this->crudHandler, $this->userManager, UserType::class, true);
 
         $this->assertSame(View::class, get_class($userController->getMeAction()));
         $this->assertArrayHasKey('user', $userController->getMeAction()->getData());
@@ -61,7 +62,7 @@ class UserControllerTest extends TestCase
 
     public function testPostMeActionNotSoftwareAsAService()
     {
-        $userController = new UserController($this->authentication, $this->crudHandler, $this->userManager, false);
+        $userController = new UserController($this->authentication, $this->crudHandler, $this->userManager, UserType::class, false);
 
         $this->assertSame(View::class, get_class($userController->postMeAction()));
         $this->assertSame(404, $userController->postMeAction()->getStatusCode());

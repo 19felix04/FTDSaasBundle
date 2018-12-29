@@ -11,7 +11,7 @@
 
 namespace FTD\SaasBundle\Event;
 
-use FTD\SaasBundle\Entity\Account;
+use FTD\SaasBundle\Model\Account;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

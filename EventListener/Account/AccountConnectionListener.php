@@ -15,7 +15,7 @@ use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Manager\AccountManager;
 use FTD\SaasBundle\Manager\SubscriptionManager;
-use FTD\SaasBundle\Manager\UserManager;
+use FTD\SaasBundle\Manager\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,7 +31,7 @@ class AccountConnectionListener implements EventSubscriberInterface
     private $accountManager;
 
     /**
-     * @var UserManager
+     * @var UserManagerInterface
      */
     private $userManager;
 
@@ -46,16 +46,16 @@ class AccountConnectionListener implements EventSubscriberInterface
     private $translator;
 
     /**
-     * @param AccountManager      $accountManager
-     * @param SubscriptionManager $subscriptionManager
-     * @param TranslatorInterface $translator
-     * @param UserManager         $userManager
+     * @param AccountManager       $accountManager
+     * @param SubscriptionManager  $subscriptionManager
+     * @param TranslatorInterface  $translator
+     * @param UserManagerInterface $userManager
      */
     public function __construct(
         AccountManager $accountManager,
         SubscriptionManager $subscriptionManager,
         TranslatorInterface $translator,
-        UserManager $userManager
+        UserManagerInterface $userManager
     ) {
         $this->accountManager = $accountManager;
         $this->subscriptionManager = $subscriptionManager;

@@ -11,6 +11,10 @@
 
             <bind key="$mailerAddress" type="string">%ftd_saas.mailer.address%</bind>
             <bind key="$mailerSenderName" type="string">%ftd_saas.mailer.sender_name%</bind>
+
+            <bind key="$accountTypeClass" type="string">%ftd_saas.form.accountType%</bind>
+            <bind key="$subscriptionTypeClass" type="string">%ftd_saas.form.subscriptionType%</bind>
+            <bind key="$userTypeClass" type="string">%ftd_saas.form.userType%</bind>
         </defaults>
 
         <prototype namespace="FTD\SaasBundle\" resource="../../*" exclude="../../{Entity,Migrations,Tests}" />

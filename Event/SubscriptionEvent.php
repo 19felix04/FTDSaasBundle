@@ -11,7 +11,7 @@
 
 namespace FTD\SaasBundle\Event;
 
-use FTD\SaasBundle\Entity\Subscription;
+use FTD\SaasBundle\Model\Subscription;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

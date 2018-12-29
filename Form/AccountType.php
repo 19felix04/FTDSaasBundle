@@ -12,6 +12,7 @@
 namespace FTD\SaasBundle\Form;
 
 use FTD\SaasBundle\Entity\Account;
+use FTD\SaasBundle\Manager\AccountManagerInterface;
 use FTD\SaasBundle\Types\PasswordType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +27,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class AccountType extends BaseType
 {
+    /**
+     * @var AccountManagerInterface
+     */
+    private $accountManager;
+
+    /**
+     * @param AccountManagerInterface $accountManager
+     */
+    public function __construct(AccountManagerInterface $accountManager)
+    {
+        $this->accountManager = $accountManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -51,7 +65,7 @@ class AccountType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefault('data_class', Account::class);
+        $resolver->setDefault('data_class', $this->accountManager->getClass());
         $resolver->setDefault('constraints', [
             new UniqueEntity(['email']),
         ]);

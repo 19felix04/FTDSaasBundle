@@ -72,4 +72,28 @@ abstract class User
      * @var Account
      */
     protected $account;
+
+    /**
+     * @param Subscription $subscription
+     */
+    abstract public function setSubscription(Subscription $subscription): void;
+
+    /**
+     * @return Subscription|null
+     */
+    abstract public function getSubscription(): ?Subscription;
+
+    /**
+     * @param string|null $email
+     *
+     * @return mixed
+     */
+    abstract public function setEmail(?string $email);
+
+    /**
+     * @param Account $account
+     *
+     * @return mixed
+     */
+    abstract public function setAccount(Account $account);
 }

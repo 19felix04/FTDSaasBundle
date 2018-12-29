@@ -123,4 +123,37 @@ abstract class Account implements UserInterface
     {
         $this->plainPassword = $plainPassword;
     }
+
+    /**
+     * @return int
+     */
+    abstract public function getId(): int;
+
+    /**
+     * @param string|null $password
+     */
+    abstract public function setPassword(?string $password);
+
+    /**
+     * The function returns the email of the account or null.
+     *
+     * @return string|null
+     */
+    abstract public function getEmail(): ?string;
+
+    /**
+     * The function adds an user to an account. Duplicated users shouldn't exist after adding.
+     *
+     * @param User $user
+     *
+     * @return Account
+     */
+    abstract public function addUser(User $user): Account;
+
+    /**
+     * The function set the current active user of the account.
+     *
+     * @param User|null $currentUser
+     */
+    abstract public function setCurrentUser(?User $currentUser): void;
 }

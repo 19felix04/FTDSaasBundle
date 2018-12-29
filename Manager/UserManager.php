@@ -11,24 +11,22 @@
 
 namespace FTD\SaasBundle\Manager;
 
-use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Model\User;
 use FTD\SaasBundle\Repository\UserRepository;
 
 /**
  * The class UserManager manage the updating and finding of an user entity.
  *
- * @method UserRepository getRepository()
- *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class UserManager extends BaseEntityManager
+class UserManager extends BaseEntityManager implements UserManagerInterface
 {
     /**
      * @return User
      */
-    public function create()
+    public function create(): User
     {
-        $user = new User();
+        $user = new \FTD\SaasBundle\Entity\User();
 
         if (null !== ($subscription = $this->authentication->getCurrentSubscription())) {
             $user->setSubscription($this->authentication->getCurrentSubscription());
@@ -40,9 +38,9 @@ class UserManager extends BaseEntityManager
     /**
      * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
-        return User::class;
+        return \FTD\SaasBundle\Entity\User::class;
     }
 
     /**
@@ -50,8 +48,16 @@ class UserManager extends BaseEntityManager
      *
      * @return User[]
      */
-    public function getUsersByEmail(string $email)
+    public function getUsersByEmail(string $email): array
     {
         return $this->getRepository()->findBy(['email' => $email]);
+    }
+
+    /**
+     * @return UserRepository
+     */
+    public function getRepository(): UserRepository
+    {
+        return $this->entityManager->getRepository($this->getClass());
     }
 }

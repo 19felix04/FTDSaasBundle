@@ -14,6 +14,7 @@ namespace FTD\SaasBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FTD\SaasBundle\Model\Account as BaseAccount;
+use FTD\SaasBundle\Model\User as User;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -43,12 +44,12 @@ class Account extends BaseAccount
     protected $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="account", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="account", cascade={"persist"})
      */
     protected $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\User", cascade={"persist"})
      */
     protected $currentUser;
 
@@ -115,7 +116,7 @@ class Account extends BaseAccount
      *
      * @return Account
      */
-    public function addUser(User $user): Account
+    public function addUser(User $user): \FTD\SaasBundle\Model\Account
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;

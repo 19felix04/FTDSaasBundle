@@ -14,9 +14,8 @@ namespace FTD\SaasBundle\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Event\SubscriptionEvent;
-use FTD\SaasBundle\Form\SubscriptionType;
 use FTD\SaasBundle\FTDSaasBundleEvents;
-use FTD\SaasBundle\Manager\SubscriptionManager;
+use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Service\Request\CRUDHandler;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +39,14 @@ class SubscriptionController
     private $crudHandler;
 
     /**
-     * @var SubscriptionManager
+     * @var SubscriptionManagerInterface
      */
     private $subscriptionManager;
+
+    /**
+     * @var string
+     */
+    private $subscriptionTypeClass;
 
     /**
      * @var bool
@@ -50,20 +54,23 @@ class SubscriptionController
     private $settingsSoftwareAsAService;
 
     /**
-     * @param Authentication      $authentication
-     * @param CRUDHandler         $crudHandler
-     * @param SubscriptionManager $subscriptionManager
-     * @param bool                $settingsSoftwareAsAService
+     * @param Authentication               $authentication
+     * @param CRUDHandler                  $crudHandler
+     * @param SubscriptionManagerInterface $subscriptionManager
+     * @param string                       $subscriptionTypeClass
+     * @param bool                         $settingsSoftwareAsAService
      */
     public function __construct(
         Authentication $authentication,
         CRUDHandler $crudHandler,
-        SubscriptionManager $subscriptionManager,
+        SubscriptionManagerInterface $subscriptionManager,
+        string $subscriptionTypeClass,
         bool $settingsSoftwareAsAService
     ) {
         $this->authentication = $authentication;
         $this->crudHandler = $crudHandler;
         $this->subscriptionManager = $subscriptionManager;
+        $this->subscriptionTypeClass = $subscriptionTypeClass;
         $this->settingsSoftwareAsAService = $settingsSoftwareAsAService;
 
         if (false === $this->settingsSoftwareAsAService) {
@@ -76,9 +83,11 @@ class SubscriptionController
      */
     public function getSubscriptionsAction()
     {
-        return View::create([
-            'results' => $this->subscriptionManager->getByAccount($this->authentication->getCurrentAccount()),
-        ]);
+        return View::create(
+            [
+                'results' => $this->subscriptionManager->getByAccount($this->authentication->getCurrentAccount()),
+            ]
+        );
     }
 
     /**
@@ -93,7 +102,7 @@ class SubscriptionController
         return $this->crudHandler->handleUpdateRequest(
             $subscription,
             $this->subscriptionManager,
-            SubscriptionType::class,
+            $this->subscriptionTypeClass,
             'subscription',
             Response::HTTP_CREATED,
             FTDSaasBundleEvents::SUBSCRIPTION_CREATE,

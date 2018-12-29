@@ -83,9 +83,11 @@ class SubscriptionFactoryListener implements EventSubscriberInterface
 
         if (null === $user->getSubscription()) {
             $subscription = $this->subscriptionManager->create();
-            $subscription->addUser($user);
             $subscription->setName($this->translator->trans('factory.subscription.name', [], 'ftd_saas'));
 
+            $user->setSubscription($subscription);
+
+            $this->userManager->update($user);
             $this->subscriptionManager->update($subscription);
         }
     }

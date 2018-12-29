@@ -14,7 +14,7 @@ namespace FTD\SaasBundle\Service\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\View\View;
-use FTD\SaasBundle\Manager\BaseEntityManager;
+use FTD\SaasBundle\Manager\CRUDEntityManagerInterface;
 use FTD\SaasBundle\Model\ApiHistoryResource;
 use FTD\SaasBundle\Model\ApiResource;
 use FTD\SaasBundle\Repository\ApiResourceRepositoryInterface;
@@ -126,19 +126,19 @@ class CRUDHandler
     }
 
     /**
-     * @param mixed             $entity
-     * @param BaseEntityManager $baseEntityManager
-     * @param string            $formName
-     * @param string            $responseKey
-     * @param int               $successStatusCode
-     * @param string            $eventName
-     * @param Event|null        $entityEvent
+     * @param mixed                      $entity
+     * @param CRUDEntityManagerInterface $crudEntityManagerInterface
+     * @param string                     $formName
+     * @param string                     $responseKey
+     * @param int                        $successStatusCode
+     * @param string                     $eventName
+     * @param Event|null                 $entityEvent
      *
      * @return View
      */
     public function handleUpdateRequest(
         $entity,
-        BaseEntityManager $baseEntityManager,
+        CRUDEntityManagerInterface $crudEntityManagerInterface,
         string $formName,
         string $responseKey,
         int $successStatusCode = Response::HTTP_OK,
@@ -180,10 +180,10 @@ class CRUDHandler
 
         if ($form->isValid()) {
             if ($oldEntityVersion instanceof ApiHistoryResource) {
-                $baseEntityManager->update($oldEntityVersion);
+                $crudEntityManagerInterface->update($oldEntityVersion);
                 $entity->addHistoryChild($oldEntityVersion);
             }
-            $baseEntityManager->update($entity);
+            $crudEntityManagerInterface->update($entity);
 
             if ($entityEvent) {
                 $this->eventDispatcher->dispatch($eventName, $entityEvent);
@@ -196,17 +196,17 @@ class CRUDHandler
     }
 
     /**
-     * @param ApiResource       $entity
-     * @param BaseEntityManager $baseEntityManager
-     * @param int               $successStatusCode
-     * @param string            $eventName
-     * @param Event|null        $entityEvent
+     * @param ApiResource                $entity
+     * @param CRUDEntityManagerInterface $crudEntityManagerInterface
+     * @param int                        $successStatusCode
+     * @param string                     $eventName
+     * @param Event|null                 $entityEvent
      *
      * @return View
      */
     public function handleRemoveRequest(
         ApiResource $entity,
-        BaseEntityManager $baseEntityManager,
+        CRUDEntityManagerInterface $crudEntityManagerInterface,
         int $successStatusCode = Response::HTTP_OK,
         string $eventName = '',
         Event $entityEvent = null
@@ -220,7 +220,7 @@ class CRUDHandler
                 )
             );
         }
-        $baseEntityManager->remove($entity);
+        $crudEntityManagerInterface->remove($entity);
 
         if ($entityEvent) {
             $this->eventDispatcher->dispatch($eventName, $entityEvent);

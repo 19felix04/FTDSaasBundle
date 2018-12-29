@@ -12,6 +12,7 @@
 namespace FTD\Tests\Controller;
 
 use FTD\SaasBundle\Controller\SubscriptionController;
+use FTD\SaasBundle\Form\SubscriptionType;
 use FTD\SaasBundle\Manager\SubscriptionManager;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Service\Request\CRUDHandler;
@@ -53,7 +54,11 @@ class SubscriptionControllerTest extends TestCase
     {
         $this->expectExceptionObject(new NotFoundHttpException());
         $subscriptionController = new SubscriptionController(
-            $this->authentication, $this->crudHandler, $this->subscriptionManager, false
+            $this->authentication,
+            $this->crudHandler,
+            $this->subscriptionManager,
+            SubscriptionType::class,
+            false
         );
         $subscriptionController->postSubscriptionAction();
     }

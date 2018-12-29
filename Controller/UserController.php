@@ -16,9 +16,8 @@ use FOS\RestBundle\View\View;
 use FTD\SaasBundle\Entity\User;
 use FTD\SaasBundle\Event\UserEvent;
 use FTD\SaasBundle\Form\AccountUserType;
-use FTD\SaasBundle\Form\UserType;
 use FTD\SaasBundle\FTDSaasBundleEvents;
-use FTD\SaasBundle\Manager\UserManager;
+use FTD\SaasBundle\Manager\UserManagerInterface;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Service\Request\CRUDHandler;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,9 +40,14 @@ class UserController
     private $crudHandler;
 
     /**
-     * @var UserManager
+     * @var UserManagerInterface
      */
     private $userManager;
+
+    /**
+     * @var string
+     */
+    private $userTypeClass;
 
     /**
      * @var bool
@@ -51,20 +55,23 @@ class UserController
     private $settingsSoftwareAsAService;
 
     /**
-     * @param Authentication $authentication
-     * @param CRUDHandler    $crudHandler
-     * @param UserManager    $userManager
-     * @param bool           $settingsSoftwareAsAService
+     * @param Authentication       $authentication
+     * @param CRUDHandler          $crudHandler
+     * @param UserManagerInterface $userManager
+     * @param string               $userTypeClass
+     * @param bool                 $settingsSoftwareAsAService
      */
     public function __construct(
         Authentication $authentication,
         CRUDHandler $crudHandler,
-        UserManager $userManager,
+        UserManagerInterface $userManager,
+        string $userTypeClass,
         bool $settingsSoftwareAsAService
     ) {
         $this->authentication = $authentication;
         $this->crudHandler = $crudHandler;
         $this->userManager = $userManager;
+        $this->userTypeClass = $userTypeClass;
         $this->settingsSoftwareAsAService = $settingsSoftwareAsAService;
     }
 
@@ -127,7 +134,7 @@ class UserController
         return $this->crudHandler->handleUpdateRequest(
             $user,
             $this->userManager,
-            UserType::class,
+            $this->userTypeClass,
             'user',
             Response::HTTP_CREATED,
             FTDSaasBundleEvents::USER_CREATE,

@@ -11,8 +11,8 @@
 
 namespace FTD\SaasBundle\Manager;
 
-use FTD\SaasBundle\Entity\Account;
-use FTD\SaasBundle\Entity\Subscription;
+use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
 use FTD\SaasBundle\Repository\SubscriptionRepository;
 
 /**
@@ -22,14 +22,14 @@ use FTD\SaasBundle\Repository\SubscriptionRepository;
  *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class SubscriptionManager extends BaseEntityManager
+class SubscriptionManager extends BaseEntityManager implements SubscriptionManagerInterface
 {
     /**
      * @return Subscription
      */
-    public function create()
+    public function create(): Subscription
     {
-        $subscription = new Subscription();
+        $subscription = new \FTD\SaasBundle\Entity\Subscription();
 
         return $subscription;
     }
@@ -37,15 +37,15 @@ class SubscriptionManager extends BaseEntityManager
     /**
      * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
-        return Subscription::class;
+        return \FTD\SaasBundle\Entity\Subscription::class;
     }
 
     /**
      * @param Account $account
      *
-     * @return Subscription[]
+     * @return \FTD\SaasBundle\Model\Subscription[]
      */
     public function getByAccount(Account $account)
     {

@@ -11,6 +11,9 @@
 
 namespace FTD\SaasBundle\DependencyInjection;
 
+use FTD\SaasBundle\Manager\AccountManagerInterface;
+use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
+use FTD\SaasBundle\Manager\UserManagerInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -40,12 +43,35 @@ class FTDSaasExtension extends Extension
         $this->loadConfigByArray('settings', $config, $container);
         $this->loadConfigByArray('template', $config, $container);
         $this->loadConfigByArray('mailer', $config, $container);
+        $this->loadConfigByArray('form', $config, $container);
+
+        $this->registerServices($config, $container);
     }
 
     public function loadConfigByArray(string $name, array $configs, ContainerBuilder $container)
     {
         foreach ($configs[$name] as $configName => $config) {
             $container->setParameter(sprintf('ftd_saas.%s.%s', $name, $configName), $config);
+        }
+    }
+
+    /**
+     * The function set alias for services.
+     *
+     * @param array            $config
+     * @param ContainerBuilder $containerBuilder
+     */
+    private function registerServices($config, ContainerBuilder $containerBuilder)
+    {
+        $services = [
+            'accountManager' => AccountManagerInterface::class,
+            'userManager' => UserManagerInterface::class,
+            'subscriptionManager' => SubscriptionManagerInterface::class,
+        ];
+
+        foreach ($services as $serviceID => $serviceClass) {
+            $containerBuilder->setAlias('ftd_saas.manager.'.$serviceID, $config['manager'][$serviceID]);
+            $containerBuilder->setAlias($serviceClass, 'ftd_saas.manager.'.$serviceID);
         }
     }
 }

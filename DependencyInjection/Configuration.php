@@ -11,6 +11,12 @@
 
 namespace FTD\SaasBundle\DependencyInjection;
 
+use FTD\SaasBundle\Form\AccountType;
+use FTD\SaasBundle\Form\SubscriptionType;
+use FTD\SaasBundle\Form\UserType;
+use FTD\SaasBundle\Manager\AccountManager;
+use FTD\SaasBundle\Manager\SubscriptionManager;
+use FTD\SaasBundle\Manager\UserManager;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -47,12 +53,24 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('template')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('passwordForget')
-                            ->defaultValue('false')
-                        ->end()
-                        ->scalarNode('accountCreate')
-                            ->defaultValue('false')
-                        ->end()
+                        ->scalarNode('passwordForget')->defaultValue('false')->end()
+                        ->scalarNode('accountCreate')->defaultValue('false')->end()
+                    ->end()
+                ->end()
+                ->arrayNode('form')
+                ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('accountType')->defaultValue(AccountType::class)->end()
+                        ->scalarNode('userType')->defaultValue(UserType::class)->end()
+                        ->scalarNode('subscriptionType')->defaultValue(SubscriptionType::class)->end()
+                    ->end()
+                ->end()
+                ->arrayNode('manager')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('accountManager')->defaultValue(AccountManager::class)->end()
+                        ->scalarNode('userManager')->defaultValue(UserManager::class)->end()
+                        ->scalarNode('subscriptionManager')->defaultValue(SubscriptionManager::class)->end()
                     ->end()
                 ->end()
             ->end()

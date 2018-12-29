@@ -13,7 +13,6 @@ namespace FTD\SaasBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use FTD\SaasBundle\Service\Authentication;
 
 /**
@@ -21,7 +20,7 @@ use FTD\SaasBundle\Service\Authentication;
  *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-abstract class BaseEntityManager
+abstract class BaseEntityManager implements CRUDEntityManagerInterface
 {
     /**
      * @var EntityManager
@@ -48,15 +47,7 @@ abstract class BaseEntityManager
     /**
      * @return string
      */
-    abstract public function getClass();
-
-    /**
-     * @return EntityRepository
-     */
-    public function getRepository()
-    {
-        return $this->entityManager->getRepository($this->getClass());
-    }
+    abstract public function getClass(): string;
 
     /**
      * The function saves the passing entity to database.
@@ -77,9 +68,6 @@ abstract class BaseEntityManager
      *
      * @param mixed $entity
      * @param bool  $flush
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function remove($entity, $flush = true)
     {

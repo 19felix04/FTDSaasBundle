@@ -12,6 +12,8 @@
 namespace FTD\SaasBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
 use FTD\SaasBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMS;
 

@@ -12,6 +12,7 @@
 namespace FTD\SaasBundle\Form;
 
 use FTD\SaasBundle\Entity\Subscription;
+use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,6 +26,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class SubscriptionType extends BaseType
 {
+    /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
+     * @param SubscriptionManagerInterface $subscriptionManager
+     */
+    public function __construct(SubscriptionManagerInterface $subscriptionManager)
+    {
+        $this->subscriptionManager = $subscriptionManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,6 +60,6 @@ class SubscriptionType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
-        $resolver->setDefault('data_class', Subscription::class);
+        $resolver->setDefault('data_class', $this->subscriptionManager->getClass());
     }
 }

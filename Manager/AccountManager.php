@@ -12,17 +12,15 @@
 namespace FTD\SaasBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use FTD\SaasBundle\Entity\Account;
+use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Repository\AccountRepository;
 use FTD\SaasBundle\Service\Authentication;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
- *
- * @method AccountRepository getRepository()
  */
-class AccountManager extends BaseEntityManager
+class AccountManager extends BaseEntityManager implements AccountManagerInterface
 {
     /**
      * @var UserPasswordEncoderInterface
@@ -65,7 +63,7 @@ class AccountManager extends BaseEntityManager
      *
      * @return mixed
      */
-    public function getAccountByEmail($email)
+    public function getAccountByEmail($email): ?Account
     {
         return $this->getRepository()->findOneBy(['email' => $email]);
     }
@@ -73,16 +71,24 @@ class AccountManager extends BaseEntityManager
     /**
      * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
-        return Account::class;
+        return \FTD\SaasBundle\Entity\Account::class;
     }
 
     /**
-     * @return Account
+     * @return null|Account
      */
-    public function create()
+    public function create(): Account
     {
-        return new Account();
+        return new \FTD\SaasBundle\Entity\Account();
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityRepository|AccountRepository
+     */
+    public function getRepository(): AccountRepository
+    {
+        return $this->entityManager->getRepository($this->getClass());
     }
 }
