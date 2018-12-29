@@ -15,8 +15,11 @@ use FTD\SaasBundle\Form\AccountType;
 use FTD\SaasBundle\Form\SubscriptionType;
 use FTD\SaasBundle\Form\UserType;
 use FTD\SaasBundle\Manager\AccountManager;
+use FTD\SaasBundle\Manager\AccountManagerInterface;
 use FTD\SaasBundle\Manager\SubscriptionManager;
+use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
 use FTD\SaasBundle\Manager\UserManager;
+use FTD\SaasBundle\Manager\UserManagerInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -61,16 +64,25 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('accountType')->defaultValue(AccountType::class)->end()
-                        ->scalarNode('userType')->defaultValue(UserType::class)->end()
                         ->scalarNode('subscriptionType')->defaultValue(SubscriptionType::class)->end()
+                        ->scalarNode('userType')->defaultValue(UserType::class)->end()
                     ->end()
                 ->end()
                 ->arrayNode('manager')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('accountManager')->defaultValue(AccountManager::class)->end()
-                        ->scalarNode('userManager')->defaultValue(UserManager::class)->end()
-                        ->scalarNode('subscriptionManager')->defaultValue(SubscriptionManager::class)->end()
+                        ->scalarNode('accountManager')
+                            ->defaultValue(AccountManager::class)
+                            ->info(sprintf('The service should implements %s', AccountManagerInterface::class))
+                        ->end()
+                        ->scalarNode('subscriptionManager')
+                            ->defaultValue(SubscriptionManager::class)
+                            ->info(sprintf('The service should implements %s', SubscriptionManagerInterface::class))
+                        ->end()
+                        ->scalarNode('userManager')
+                            ->defaultValue(UserManager::class)
+                            ->info(sprintf('The service should implements %s', UserManagerInterface::class))
+                        ->end()
                     ->end()
                 ->end()
             ->end()
