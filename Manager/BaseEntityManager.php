@@ -11,8 +11,10 @@
 
 namespace FTD\SaasBundle\Manager;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use FTD\SaasBundle\Service\Authentication;
 
 /**
@@ -75,5 +77,13 @@ abstract class BaseEntityManager implements CRUDEntityManagerInterface
         if ($flush) {
             $this->entityManager->flush();
         }
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public function getRepository()
+    {
+        return $this->entityManager->getRepository($this->getClass());
     }
 }
