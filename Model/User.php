@@ -12,6 +12,7 @@
 namespace FTD\SaasBundle\Model;
 
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @JMS\ExclusionPolicy("ALL")
@@ -33,6 +34,7 @@ abstract class User
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
+     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Subscription", inversedBy="users", cascade={"persist"})
      */
     protected $subscription;
 
@@ -41,6 +43,7 @@ abstract class User
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
+     * @ORM\Column(type="string")
      */
     protected $username;
 
@@ -49,6 +52,7 @@ abstract class User
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
+     * @ORM\Column(type="string")
      */
     protected $email;
 
@@ -65,6 +69,7 @@ abstract class User
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $lastActivityAt;
 
@@ -74,26 +79,100 @@ abstract class User
     protected $account;
 
     /**
-     * @param Subscription $subscription
+     * @return int
      */
-    abstract public function setSubscription(Subscription $subscription): void;
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
-     * @return Subscription|null
+     * @return null|Subscription
      */
-    abstract public function getSubscription(): ?Subscription;
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * @param Subscription $subscription
+     */
+    public function setSubscription(Subscription $subscription): void
+    {
+        $this->subscription = $subscription;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string|null $username
+     */
+    public function setUsername(?string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
 
     /**
      * @param string|null $email
-     *
-     * @return mixed
      */
-    abstract public function setEmail(?string $email);
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSelf(): ?string
+    {
+        return $this->self;
+    }
+
+    /**
+     * @param string|null $self
+     */
+    public function setSelf(?string $self): void
+    {
+        $this->self = $self;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastActivityAt(): \DateTime
+    {
+        return $this->lastActivityAt;
+    }
+
+    /**
+     * @param \DateTime $lastActivityAt
+     */
+    public function setLastActivityAt(\DateTime $lastActivityAt): void
+    {
+        $this->lastActivityAt = $lastActivityAt;
+    }
+
+    /**
+     * @return Account
+     */
+    public abstract function getAccount(): Account;
 
     /**
      * @param Account $account
-     *
-     * @return mixed
      */
-    abstract public function setAccount(Account $account);
+    public abstract function setAccount(Account $account): void;
 }

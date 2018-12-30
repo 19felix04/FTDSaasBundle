@@ -91,4 +91,14 @@ class AccountManager extends BaseEntityManager implements AccountManagerInterfac
     {
         return $this->entityManager->getRepository($this->getClass());
     }
+
+    /**
+     * @param string $confirmationToken
+     *
+     * @return Account|null
+     */
+    public function getByConfirmationToken(string $confirmationToken): ?Account
+    {
+        return $this->getRepository()->findByConfirmationToken($confirmationToken);
+    }
 }

@@ -20,7 +20,7 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
  *
- * @ORM\Table(name="subscription")
+ * @ORM\Table(name="ftd_saas_subscription")
  * @ORM\Entity(repositoryClass="FTD\SaasBundle\Repository\SubscriptionRepository")
  * @JMS\ExclusionPolicy("all")
  */
@@ -34,11 +34,6 @@ class Subscription extends BaseSubscription
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    protected $name;
-
-    /**
      * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="subscription", cascade={"persist"})
      */
     protected $users;
@@ -49,52 +44,22 @@ class Subscription extends BaseSubscription
     }
 
     /**
-     * @return int
+     * @return ArrayCollection|User[]
      */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string|null $name
-     *
-     * @return Subscription
-     */
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
+    public function getUsers(): ArrayCollection
     {
         return $this->users;
     }
 
-    public function addUser(User $user): self
+    public function addUser(\FTD\SaasBundle\Model\User $user)
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
             $user->setSubscription($this);
         }
-
-        return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeUser(\FTD\SaasBundle\Model\User $user)
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
@@ -102,7 +67,5 @@ class Subscription extends BaseSubscription
                 $user->setSubscription(null);
             }
         }
-
-        return $this;
     }
 }

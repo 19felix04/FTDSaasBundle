@@ -185,9 +185,16 @@ class AccountController
         JWTTokenManagerInterface $jwtManager,
         TranslatorInterface $translator
     ) {
-        $account = $this->accountManager->getRepository()->findByConfirmationToken(
-            $request->request->get('confirmationToken')
-        );
+        if(($confirmationToken = $request->request->get('confirmationToken', null)) === null) {
+            return View::create(
+                ['errors' => [$translator->trans(
+                    'error.accountPasswordPost.noConfirmationToken', [], 'ftd_saas'
+                )]],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $account = $this->accountManager->getByConfirmationToken($confirmationToken);
         if (!$account instanceof Account) {
             return View::create(
                 ['errors' => [$translator->trans(

@@ -14,13 +14,12 @@ namespace FTD\SaasBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FTD\SaasBundle\Model\Account as BaseAccount;
-use FTD\SaasBundle\Model\User as User;
 use JMS\Serializer\Annotation as JMS;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
  *
- * @ORM\Table(name="account")
+ * @ORM\Table(name="ftd_saas_account")
  * @ORM\Entity(repositoryClass="FTD\SaasBundle\Repository\AccountRepository")
  * @JMS\ExclusionPolicy("all")
  */
@@ -34,65 +33,22 @@ class Account extends BaseAccount
     protected $id;
 
     /**
-     * @ORM\Column(type="string", unique=true)
-     */
-    protected $email;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $password;
-
-    /**
+     * @var ArrayCollection
+     *
      * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="account", cascade={"persist"})
      */
     protected $users;
 
     /**
+     * @var User
+     *
      * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\User", cascade={"persist"})
      */
     protected $currentUser;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $confirmationToken;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $confirmationRequestAt;
-
-    /**
-     * @return int
-     */
-    public function getId(): int
+    public function __construct()
     {
-        return $this->id;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string|null $email
-     */
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @param string|null $password
-     */
-    public function setPassword(?string $password): void
-    {
-        $this->password = $password;
+        $this->users = new ArrayCollection();
     }
 
     /**
@@ -112,11 +68,11 @@ class Account extends BaseAccount
     }
 
     /**
-     * @param User $user
+     * @param \FTD\SaasBundle\Model\User $user
      *
      * @return Account
      */
-    public function addUser(User $user): \FTD\SaasBundle\Model\Account
+    public function addUser(\FTD\SaasBundle\Model\User $user)
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
@@ -127,58 +83,18 @@ class Account extends BaseAccount
     }
 
     /**
-     * @return null|User
+     * @return null|\FTD\SaasBundle\Model\User
      */
-    public function getCurrentUser(): ?User
+    public function getCurrentUser(): ?\FTD\SaasBundle\Model\User
     {
         return $this->currentUser;
     }
 
     /**
-     * @param User|null $currentUser
+     * @param \FTD\SaasBundle\Model\User|null $currentUser
      */
-    public function setCurrentUser(?User $currentUser): void
+    public function setCurrentUser(?\FTD\SaasBundle\Model\User $currentUser): void
     {
         $this->currentUser = $currentUser;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getConfirmationToken()
-    {
-        return $this->confirmationToken;
-    }
-
-    /**
-     * @param string|null $confirmationToken
-     *
-     * @return self
-     */
-    public function setConfirmationToken(?string $confirmationToken): self
-    {
-        $this->confirmationToken = $confirmationToken;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getConfirmationRequestAt()
-    {
-        return $this->confirmationRequestAt;
-    }
-
-    /**
-     * @param \DateTime|null $confirmationRequestAt
-     *
-     * @return self
-     */
-    public function setConfirmationRequestAt(?\DateTime $confirmationRequestAt): self
-    {
-        $this->confirmationRequestAt = $confirmationRequestAt;
-
-        return $this;
     }
 }

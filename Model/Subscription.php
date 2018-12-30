@@ -11,7 +11,9 @@
 
 namespace FTD\SaasBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @JMS\ExclusionPolicy("all")
@@ -22,9 +24,6 @@ abstract class Subscription
 {
     /**
      * @var int
-     *
-     * @JMS\Expose()
-     * @JMS\Groups({"detail", "list"})
      */
     protected $id;
 
@@ -35,4 +34,51 @@ abstract class Subscription
      * @JMS\Groups({"detail", "list"})
      */
     protected $name;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string|null $name
+     *
+     * @return Subscription
+     */
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|User[]
+     */
+    public abstract function getUsers(): ArrayCollection;
+
+    /**
+     * @param User $user
+     *
+     * @return Subscription
+     */
+    public abstract function addUser(User $user);
+
+    /**
+     * @param User $user
+     *
+     * @return Subscription
+     */
+    public abstract function removeUser(User $user);
 }

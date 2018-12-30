@@ -44,6 +44,13 @@ interface AccountManagerInterface
     public function getAccountByEmail($email): ?Account;
 
     /**
+     * @param string $confirmationToken
+     *
+     * @return Account|null
+     */
+    public function getByConfirmationToken(string $confirmationToken): ?Account;
+
+    /**
      * @return AccountRepository
      */
     public function getRepository(): AccountRepository;

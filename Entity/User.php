@@ -11,16 +11,15 @@
 
 namespace FTD\SaasBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use FTD\SaasBundle\Model\Account;
-use FTD\SaasBundle\Model\Subscription;
 use FTD\SaasBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMS;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
 
- * @ORM\Table(name="user")
+ * @ORM\Table(name="ftd_saas_user")
  * @ORM\Entity(repositoryClass="FTD\SaasBundle\Repository\UserRepository")
  * @JMS\ExclusionPolicy("ALL")
  */
@@ -36,134 +35,22 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    protected $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     */
-    protected $email;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $lastActivityAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Subscription", inversedBy="users", cascade={"persist"})
-     */
-    protected $subscription;
-
-    /**
      * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Account", inversedBy="users", cascade={"persist"})
      */
     protected $account;
 
     /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return null|Subscription
-     */
-    public function getSubscription(): ?Subscription
-    {
-        return $this->subscription;
-    }
-
-    /**
-     * @param Subscription $subscription
-     */
-    public function setSubscription(Subscription $subscription): void
-    {
-        $this->subscription = $subscription;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param string|null $username
-     */
-    public function setUsername(?string $username): void
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string|null $email
-     */
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getSelf(): ?string
-    {
-        return $this->self;
-    }
-
-    /**
-     * @param string|null $self
-     */
-    public function setSelf(?string $self): void
-    {
-        $this->self = $self;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getLastActivityAt(): \DateTime
-    {
-        return $this->lastActivityAt;
-    }
-
-    /**
-     * @param \DateTime $lastActivityAt
-     */
-    public function setLastActivityAt(\DateTime $lastActivityAt): void
-    {
-        $this->lastActivityAt = $lastActivityAt;
-    }
-
-    /**
      * @return Account
      */
-    public function getAccount(): Account
+    public function getAccount(): \FTD\SaasBundle\Model\Account
     {
         return $this->account;
     }
 
     /**
-     * @param Account $account
+     * @param \FTD\SaasBundle\Model\Account $account
      */
-    public function setAccount(Account $account): void
+    public function setAccount(\FTD\SaasBundle\Model\Account $account): void
     {
         $this->account = $account;
     }

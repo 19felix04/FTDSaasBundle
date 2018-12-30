@@ -13,6 +13,7 @@ namespace FTD\SaasBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation as JMS;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -25,53 +26,138 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class Account implements UserInterface
 {
     /**
-     * @var int
+     * @var
      */
     protected $id;
 
     /**
-     * @var string|null
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true)
      */
     protected $email;
 
     /**
-     * @var string|null
+     * @var string
+     *
+     * @ORM\Column(type="string")
      */
     protected $password;
 
     /**
      * @var string|null
-     */
-    protected $plainPassword;
-
-    /**
-     * @var User[]|ArrayCollection
-     */
-    protected $users;
-
-    /**
-     * @var User
-     */
-    protected $currentUser;
-
-    /**
-     * @var string|null
+     *
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $confirmationToken;
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $confirmationRequestAt;
 
     /**
-     * @var Account|null
+     * @var string
      */
-    protected $account;
+    protected $plainPassword;
 
-    public function __construct()
+    /**
+     * @return ArrayCollection|User[]
+     */
+    public abstract function getUsers();
+
+    /**
+     * @param ArrayCollection|User[] $users
+     */
+    public abstract function setUsers($users): void;
+
+    /**
+     * @param User $user
+     */
+    public abstract function addUser(User $user);
+
+    /**
+     * @return null|User
+     */
+    public abstract function getCurrentUser(): ?User;
+
+    /**
+     * @param User|null $currentUser
+     */
+    public abstract function setCurrentUser(?User $currentUser): void;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
-        $this->users = new ArrayCollection();
+        return $this->id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @param string|null $password
+     */
+    public function setPassword(?string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * @param string|null $confirmationToken
+     *
+     * @return self
+     */
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getConfirmationRequestAt()
+    {
+        return $this->confirmationRequestAt;
+    }
+
+    /**
+     * @param \DateTime|null $confirmationRequestAt
+     *
+     * @return self
+     */
+    public function setConfirmationRequestAt(?\DateTime $confirmationRequestAt): self
+    {
+        $this->confirmationRequestAt = $confirmationRequestAt;
+
+        return $this;
     }
 
     public function getRoles()
@@ -123,37 +209,4 @@ abstract class Account implements UserInterface
     {
         $this->plainPassword = $plainPassword;
     }
-
-    /**
-     * @return int
-     */
-    abstract public function getId(): int;
-
-    /**
-     * @param string|null $password
-     */
-    abstract public function setPassword(?string $password);
-
-    /**
-     * The function returns the email of the account or null.
-     *
-     * @return string|null
-     */
-    abstract public function getEmail(): ?string;
-
-    /**
-     * The function adds an user to an account. Duplicated users shouldn't exist after adding.
-     *
-     * @param User $user
-     *
-     * @return Account
-     */
-    abstract public function addUser(User $user): Account;
-
-    /**
-     * The function set the current active user of the account.
-     *
-     * @param User|null $currentUser
-     */
-    abstract public function setCurrentUser(?User $currentUser): void;
 }
