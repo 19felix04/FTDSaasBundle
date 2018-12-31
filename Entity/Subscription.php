@@ -11,8 +11,6 @@
 
 namespace FTD\SaasBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use FTD\SaasBundle\Model\Subscription as BaseSubscription;
 use JMS\Serializer\Annotation as JMS;

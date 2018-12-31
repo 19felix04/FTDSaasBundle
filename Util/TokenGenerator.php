@@ -25,6 +25,6 @@ class TokenGenerator
      */
     public function generateToken()
     {
-        return base64_encode(md5(uniqid(strtotime(rand(0, 99999).' seconds'))));
+        return base64_encode(md5(uniqid(strtotime(rand(0, 99999) . ' seconds'))));
     }
 }

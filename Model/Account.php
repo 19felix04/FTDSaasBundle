@@ -12,8 +12,8 @@
 namespace FTD\SaasBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -76,6 +76,11 @@ abstract class Account implements UserInterface
      * @var string
      */
     protected $plainPassword;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -197,11 +202,6 @@ abstract class Account implements UserInterface
     public function setPlainPassword(?string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
-    }
-
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
     }
 
     /**

@@ -47,7 +47,7 @@ class AccountManager extends BaseEntityManager implements AccountManagerInterfac
      * @param Account $account
      * @param bool    $flush
      */
-    public function update($account, $flush = true) :void
+    public function update($account, $flush = true): void
     {
         if (null != $account->getPlainPassword()) {
             $account->setPassword(

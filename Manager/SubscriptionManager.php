@@ -47,7 +47,7 @@ class SubscriptionManager extends BaseEntityManager implements SubscriptionManag
      *
      * @return \FTD\SaasBundle\Model\Subscription[]
      */
-    public function getByAccount(Account $account) :array
+    public function getByAccount(Account $account): array
     {
         return $this->getRepository()->findByAccount($account);
     }

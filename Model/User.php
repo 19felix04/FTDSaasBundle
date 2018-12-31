@@ -11,8 +11,8 @@
 
 namespace FTD\SaasBundle\Model;
 
-use JMS\Serializer\Annotation as JMS;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @JMS\ExclusionPolicy("ALL")

@@ -11,7 +11,6 @@
 
 namespace FTD\SaasBundle\Manager;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Repository\AccountRepository;
 

@@ -11,7 +11,6 @@
 
 namespace FTD\SaasBundle\Form;
 
-use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Manager\AccountManagerInterface;
 use FTD\SaasBundle\Types\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -32,7 +32,6 @@ class AccountConnectionListener implements EventSubscriberInterface
      */
     private $userManager;
 
-
     /**
      * @param AccountCreationHandlerInterface $accountCreationHandler
      * @param UserManagerInterface            $userManager

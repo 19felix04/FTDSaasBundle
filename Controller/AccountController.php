@@ -158,7 +158,7 @@ class AccountController
                         'error.accountPasswordDelete.notEnoughTimeAgo',
                         ['passwordResetTimeInMinutes' => $this->passwordResetTime / 3600],
                         'ftd_saas'
-                    )
+                    ),
                 ]],
                 Response::HTTP_BAD_REQUEST
             );
@@ -187,7 +187,7 @@ class AccountController
         JWTTokenManagerInterface $jwtManager,
         TranslatorInterface $translator
     ) {
-        if(($confirmationToken = $request->request->get('confirmationToken', null)) === null) {
+        if (null === ($confirmationToken = $request->request->get('confirmationToken', null))) {
             return View::create(
                 ['errors' => [$translator->trans(
                     'error.accountPasswordPost.noConfirmationToken', [], 'ftd_saas'

@@ -65,6 +65,6 @@ class UserRepository extends ServiceEntityRepository implements ApiResourceRepos
     {
         $qb = parent::createQueryBuilder($alias, $indexBy);
 
-        return $qb->orderBy($alias.'.username', 'ASC');
+        return $qb->orderBy($alias . '.username', 'ASC');
     }
 }

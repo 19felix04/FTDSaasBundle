@@ -117,7 +117,7 @@ class CRUDHandler
             && null !== $orderByDirection
             && in_array($orderByDirection, ['ASC', 'DESC'])
         ) {
-            $queryBuilder->orderBy($queryBuilder->getRootAliases()[0].'.'.$orderByField, $orderByDirection);
+            $queryBuilder->orderBy($queryBuilder->getRootAliases()[0] . '.' . $orderByField, $orderByDirection);
         }
 
         $this->filterBuilderUpdater->addFilterConditions($form, $queryBuilder);

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the FTDSaasBundle package.
+ *
+ * (c) Felix Niedballa <https://felixniedballa.de/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FTD\SaasBundle\Service\Account;
 
 use FTD\SaasBundle\Manager\AccountManagerInterface;
@@ -36,11 +45,11 @@ class AccountCreationHandler implements AccountCreationHandlerInterface
 
     /**
      * @param Account $account
-     * @param User[]   $users
+     * @param User[]  $users
      *
      * @return void
      */
-    public function process(Account $account, array $users) :void
+    public function process(Account $account, array $users): void
     {
         if (count($users) > 0) {
             foreach ($users as $i => $user) {
