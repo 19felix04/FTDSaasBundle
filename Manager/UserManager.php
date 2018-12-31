@@ -13,6 +13,7 @@ namespace FTD\SaasBundle\Manager;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use FTD\SaasBundle\Model\User;
+use Redaxeo\Repository\UserRepository;
 
 /**
  * The class UserManager manage the updating and finding of an user entity.
@@ -27,6 +28,7 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     public function create(): User
     {
         $user = new \FTD\SaasBundle\Entity\User();
+        $user->setCreatedAt(new \DateTime());
 
         if (null !== ($subscription = $this->authentication->getCurrentSubscription())) {
             $user->setSubscription($this->authentication->getCurrentSubscription());
@@ -54,7 +56,7 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     }
 
     /**
-     * @return ObjectRepository
+     * @return UserRepository
      */
     public function getRepository()
     {

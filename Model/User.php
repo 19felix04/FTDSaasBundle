@@ -19,7 +19,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-abstract class User
+abstract class User extends ApiResource
 {
     /**
      * @var int
@@ -79,27 +79,51 @@ abstract class User
     protected $account;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getApiPath()
+    {
+        return 'users';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkUserCanCreate(User $user)
+    {
+        return $this->getSubscription() === $user->getSubscription();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkUserCanEdit(User $user)
+    {
+        return $this->getSubscription() === $user->getSubscription();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkUserCanSee(User $user)
+    {
+        return $this->getSubscription() === $user->getSubscription();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkUserCanDelete(User $user)
+    {
+        return false;
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @return null|Subscription
-     */
-    public function getSubscription(): ?Subscription
-    {
-        return $this->subscription;
-    }
-
-    /**
-     * @param Subscription $subscription
-     */
-    public function setSubscription(Subscription $subscription): void
-    {
-        $this->subscription = $subscription;
     }
 
     /**

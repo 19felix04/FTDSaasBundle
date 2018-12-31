@@ -13,6 +13,7 @@ namespace FTD\SaasBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -76,9 +77,9 @@ abstract class Subscription
     }
 
     /**
-     * @return ArrayCollection|User[]
+     * @return PersistentCollection|User[]
      */
-    public function getUsers(): ArrayCollection
+    public function getUsers(): PersistentCollection
     {
         return $this->users;
     }
