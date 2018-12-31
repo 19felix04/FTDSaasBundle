@@ -20,6 +20,7 @@ use FTD\SaasBundle\Manager\SubscriptionManager;
 use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
 use FTD\SaasBundle\Manager\UserManager;
 use FTD\SaasBundle\Manager\UserManagerInterface;
+use FTD\SaasBundle\Service\Account\AccountCreationHandler;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -85,6 +86,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->scalarNode('accountCreationHandler')->defaultValue(AccountCreationHandler::class)->end()
             ->end()
         ->end();
 

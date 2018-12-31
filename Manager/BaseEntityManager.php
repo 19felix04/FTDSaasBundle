@@ -15,6 +15,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use FTD\SaasBundle\Model\ApiResource;
 use FTD\SaasBundle\Service\Authentication;
 
 /**
@@ -56,9 +57,23 @@ abstract class BaseEntityManager implements CRUDEntityManagerInterface
      *
      * @param mixed $entity
      * @param bool  $flush
+     *
+     * @throws \Exception
      */
-    public function update($entity, $flush = true)
+    public function update($entity, $flush = true) :void
     {
+        if ($entity instanceof ApiResource) {
+            if ($entity->getCreatedAt() === null) {
+                $entity->setCreatedAt(new \DateTime());
+            }
+            if (
+                ($user = $this->authentication->getCurrentUser()) !== null
+                && $entity->getCreatedBy() === null
+            ) {
+                $entity->setCreatedBy($user);
+            }
+        }
+
         $this->entityManager->persist($entity);
         if ($flush) {
             $this->entityManager->flush();
@@ -71,7 +86,7 @@ abstract class BaseEntityManager implements CRUDEntityManagerInterface
      * @param mixed $entity
      * @param bool  $flush
      */
-    public function remove($entity, $flush = true)
+    public function remove($entity, $flush = true) :void
     {
         $this->entityManager->remove($entity);
         if ($flush) {
@@ -80,7 +95,7 @@ abstract class BaseEntityManager implements CRUDEntityManagerInterface
     }
 
     /**
-     * @return EntityRepository
+     * @return ObjectRepository
      */
     public function getRepository()
     {

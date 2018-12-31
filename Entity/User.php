@@ -11,7 +11,6 @@
 
 namespace FTD\SaasBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FTD\SaasBundle\Model\User as BaseUser;
 use JMS\Serializer\Annotation as JMS;
@@ -38,20 +37,4 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Account", inversedBy="users", cascade={"persist"})
      */
     protected $account;
-
-    /**
-     * @return Account
-     */
-    public function getAccount(): \FTD\SaasBundle\Model\Account
-    {
-        return $this->account;
-    }
-
-    /**
-     * @param \FTD\SaasBundle\Model\Account $account
-     */
-    public function setAccount(\FTD\SaasBundle\Model\Account $account): void
-    {
-        $this->account = $account;
-    }
 }

@@ -13,12 +13,9 @@ namespace FTD\SaasBundle\EventListener\Account;
 
 use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\FTDSaasBundleEvents;
-use FTD\SaasBundle\Manager\AccountManager;
-use FTD\SaasBundle\Manager\SubscriptionManager;
 use FTD\SaasBundle\Manager\UserManagerInterface;
+use FTD\SaasBundle\Service\Account\AccountCreationHandlerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Translation\Translator;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
@@ -26,40 +23,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AccountConnectionListener implements EventSubscriberInterface
 {
     /**
-     * @var AccountManager
+     * @var AccountCreationHandlerInterface
      */
-    private $accountManager;
+    private $accountCreationHandler;
 
     /**
      * @var UserManagerInterface
      */
     private $userManager;
 
-    /**
-     * @var SubscriptionManager
-     */
-    private $subscriptionManager;
 
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
-     * @param AccountManager       $accountManager
-     * @param SubscriptionManager  $subscriptionManager
-     * @param TranslatorInterface  $translator
-     * @param UserManagerInterface $userManager
+     * @param AccountCreationHandlerInterface $accountCreationHandler
+     * @param UserManagerInterface            $userManager
      */
     public function __construct(
-        AccountManager $accountManager,
-        SubscriptionManager $subscriptionManager,
-        TranslatorInterface $translator,
+        AccountCreationHandlerInterface $accountCreationHandler,
         UserManagerInterface $userManager
     ) {
-        $this->accountManager = $accountManager;
-        $this->subscriptionManager = $subscriptionManager;
-        $this->translator = $translator;
+        $this->accountCreationHandler = $accountCreationHandler;
         $this->userManager = $userManager;
     }
 
@@ -75,26 +57,12 @@ class AccountConnectionListener implements EventSubscriberInterface
 
     /**
      * @param AccountEvent $accountEvent
-     *
-     * @throws \Exception
      */
     public function connectAccountToExistingAccount(AccountEvent $accountEvent)
     {
         $account = $accountEvent->getAccount();
         $users = $this->userManager->getUsersByEmail($account->getEmail());
 
-        if (count($users) > 0) {
-            foreach ($users as $i => $user) {
-                $account->addUser($user);
-                if (0 === $i) {
-                    $user->setAccount($account);
-                    $account->setCurrentUser($user);
-                    $this->userManager->update($user);
-                    $this->accountManager->update($account);
-
-                    return;
-                }
-            }
-        }
+        $this->accountCreationHandler->process($account, $users);
     }
 }

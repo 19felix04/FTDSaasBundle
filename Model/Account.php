@@ -59,34 +59,23 @@ abstract class Account implements UserInterface
     protected $confirmationRequestAt;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="account", cascade={"persist"})
+     */
+    protected $users;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\User", cascade={"persist"})
+     */
+    protected $currentUser;
+
+    /**
      * @var string
      */
     protected $plainPassword;
-
-    /**
-     * @return ArrayCollection|User[]
-     */
-    public abstract function getUsers();
-
-    /**
-     * @param ArrayCollection|User[] $users
-     */
-    public abstract function setUsers($users): void;
-
-    /**
-     * @param User $user
-     */
-    public abstract function addUser(User $user);
-
-    /**
-     * @return null|User
-     */
-    public abstract function getCurrentUser(): ?User;
-
-    /**
-     * @param User|null $currentUser
-     */
-    public abstract function setCurrentUser(?User $currentUser): void;
 
     /**
      * @return int
@@ -208,5 +197,57 @@ abstract class Account implements UserInterface
     public function setPlainPassword(?string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
+    }
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
+    /**
+     * @return ArrayCollection|User[]
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param ArrayCollection|User[] $users
+     */
+    public function setUsers($users): void
+    {
+        $this->users = $users;
+    }
+
+    /**
+     * @param \FTD\SaasBundle\Model\User $user
+     *
+     * @return Account
+     */
+    public function addUser(\FTD\SaasBundle\Model\User $user)
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return null|\FTD\SaasBundle\Model\User
+     */
+    public function getCurrentUser(): ?\FTD\SaasBundle\Model\User
+    {
+        return $this->currentUser;
+    }
+
+    /**
+     * @param \FTD\SaasBundle\Model\User|null $currentUser
+     */
+    public function setCurrentUser(?\FTD\SaasBundle\Model\User $currentUser): void
+    {
+        $this->currentUser = $currentUser;
     }
 }

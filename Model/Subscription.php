@@ -32,8 +32,20 @@ abstract class Subscription
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
+     *
+     * @ORM\Column(type="string")
      */
     protected $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="subscription", cascade={"persist"})
+     */
+    protected $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -66,19 +78,26 @@ abstract class Subscription
     /**
      * @return ArrayCollection|User[]
      */
-    public abstract function getUsers(): ArrayCollection;
+    public function getUsers(): ArrayCollection
+    {
+        return $this->users;
+    }
 
-    /**
-     * @param User $user
-     *
-     * @return Subscription
-     */
-    public abstract function addUser(User $user);
+    public function addUser(\FTD\SaasBundle\Model\User $user)
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setSubscription($this);
+        }
+    }
 
-    /**
-     * @param User $user
-     *
-     * @return Subscription
-     */
-    public abstract function removeUser(User $user);
+    public function removeUser(\FTD\SaasBundle\Model\User $user)
+    {
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            if ($user->getSubscription() === $this) {
+                $user->setSubscription(null);
+            }
+        }
+    }
 }

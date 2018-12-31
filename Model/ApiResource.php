@@ -74,7 +74,7 @@ abstract class ApiResource
     protected $createdAt;
 
     /**
-     * @var \FTD\SaasBundle\Entity\User
+     * @var User
      *
      * @JMS\Expose()
      * @JMS\Groups({"detail", "list"})
@@ -178,40 +178,40 @@ abstract class ApiResource
     abstract public function getApiPath();
 
     /**
-     * @param \FTD\SaasBundle\Entity\User $user
+     * @param User $user
      *
      * @return bool
      *
      * The function checks if the passing user can create this resource
      */
-    abstract public function checkUserCanCreate(\FTD\SaasBundle\Entity\User $user);
+    abstract public function checkUserCanCreate(User $user);
 
     /**
-     * @param \FTD\SaasBundle\Entity\User $user
+     * @param User $user
      *
      * @return bool
      *
      * The function checks if the passing user can edit this resource
      */
-    abstract public function checkUserCanEdit(\FTD\SaasBundle\Entity\User $user);
+    abstract public function checkUserCanEdit(User $user);
 
     /**
-     * @param \FTD\SaasBundle\Entity\User $user
+     * @param User $user
      *
      * @return bool
      *
      * The function checks if the passing user can see this resource
      */
-    abstract public function checkUserCanSee(\FTD\SaasBundle\Entity\User $user);
+    abstract public function checkUserCanSee(User $user);
 
     /**
-     * @param \FTD\SaasBundle\Entity\User $user
+     * @param User $user
      *
      * @return bool
      *
      * The function checks if the passing user can delete this resource
      */
-    abstract public function checkUserCanDelete(\FTD\SaasBundle\Entity\User $user);
+    abstract public function checkUserCanDelete(User $user);
 
     /**
      * @return \DateTime
@@ -234,19 +234,19 @@ abstract class ApiResource
     }
 
     /**
-     * @return \FTD\SaasBundle\Entity\User
+     * @return User
      */
-    public function getCreatedBy(): \FTD\SaasBundle\Entity\User
+    public function getCreatedBy(): User
     {
         return $this->createdBy;
     }
 
     /**
-     * @param \FTD\SaasBundle\Entity\User $createdBy
+     * @param User $createdBy
      *
      * @return self
      */
-    public function setCreatedBy(\FTD\SaasBundle\Entity\User $createdBy): self
+    public function setCreatedBy(User $createdBy): self
     {
         $this->createdBy = $createdBy;
 

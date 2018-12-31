@@ -11,9 +11,9 @@
 
 namespace FTD\SaasBundle\Service;
 
-use FTD\SaasBundle\Entity\Account;
-use FTD\SaasBundle\Entity\Subscription;
-use FTD\SaasBundle\Entity\User;
+use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
+use FTD\SaasBundle\Model\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
@@ -33,8 +33,9 @@ class Authentication
      *
      * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        TokenStorageInterface $tokenStorage
+    ) {
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -61,10 +62,7 @@ class Authentication
             return null;
         }
 
-        if (
-            is_object($account = $token->getUser())
-            && $account instanceof Account
-        ) {
+        if (is_object($account = $token->getUser())) {
             return $account;
         }
 

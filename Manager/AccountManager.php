@@ -47,7 +47,7 @@ class AccountManager extends BaseEntityManager implements AccountManagerInterfac
      * @param Account $account
      * @param bool    $flush
      */
-    public function update($account, $flush = true)
+    public function update($account, $flush = true) :void
     {
         if (null != $account->getPlainPassword()) {
             $account->setPassword(
@@ -85,9 +85,9 @@ class AccountManager extends BaseEntityManager implements AccountManagerInterfac
     }
 
     /**
-     * @return \Doctrine\ORM\EntityRepository|AccountRepository
+     * @return AccountRepository
      */
-    public function getRepository(): AccountRepository
+    public function getRepository()
     {
         return $this->entityManager->getRepository($this->getClass());
     }

@@ -11,6 +11,7 @@
 
 namespace FTD\SaasBundle\Manager;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Repository\AccountRepository;
 
@@ -34,7 +35,7 @@ interface AccountManagerInterface
      *
      * @return mixed
      */
-    public function update($account, $flush = true);
+    public function update($account, $flush = true): void;
 
     /**
      * @param string $email
@@ -53,7 +54,7 @@ interface AccountManagerInterface
     /**
      * @return AccountRepository
      */
-    public function getRepository(): AccountRepository;
+    public function getRepository();
 
     /**
      * The function returns the class-name of the entity which represents the account.

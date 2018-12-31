@@ -14,6 +14,7 @@ namespace FTD\SaasBundle\DependencyInjection;
 use FTD\SaasBundle\Manager\AccountManagerInterface;
 use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
 use FTD\SaasBundle\Manager\UserManagerInterface;
+use FTD\SaasBundle\Service\Account\AccountCreationHandlerInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -36,7 +37,7 @@ class FTDSaasExtension extends Extension
 
         $loader = new XmlFileLoader(
             $container,
-            new FileLocator(__DIR__.'/../Resources/config')
+            new FileLocator(__DIR__ . '/../Resources/config')
         );
         $loader->load('services.xml');
 
@@ -70,8 +71,11 @@ class FTDSaasExtension extends Extension
         ];
 
         foreach ($services as $serviceID => $serviceClass) {
-            $containerBuilder->setAlias('ftd_saas.manager.'.$serviceID, $config['manager'][$serviceID]);
-            $containerBuilder->setAlias($serviceClass, 'ftd_saas.manager.'.$serviceID);
+            $containerBuilder->setAlias('ftd_saas.manager.' . $serviceID, $config['manager'][$serviceID]);
+            $containerBuilder->setAlias($serviceClass, 'ftd_saas.manager.' . $serviceID);
         }
+
+        $containerBuilder->setAlias('ftd_saas.accountCreationHandler', $config['accountCreationHandler']);
+        $containerBuilder->setAlias(AccountCreationHandlerInterface::class, 'ftd_saas.accountCreationHandler');
     }
 }

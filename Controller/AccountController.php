@@ -13,11 +13,11 @@ namespace FTD\SaasBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use FTD\SaasBundle\Entity\Account;
 use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\Form\PasswordResetType;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Manager\AccountManagerInterface;
+use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Util\TokenGenerator;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -153,11 +153,13 @@ class AccountController
             }
 
             return View::create(
-                ['error' => $translator->trans(
-                    'error.accountPasswordDelete.notEnoughTimeAgo',
-                    ['passwordResetTimeInMinutes' => $this->passwordResetTime / 60],
-                    'ftd_saas'
-                )],
+                ['errors' => [
+                    $translator->trans(
+                        'error.accountPasswordDelete.notEnoughTimeAgo',
+                        ['passwordResetTimeInMinutes' => $this->passwordResetTime / 3600],
+                        'ftd_saas'
+                    )
+                ]],
                 Response::HTTP_BAD_REQUEST
             );
         }
@@ -195,6 +197,7 @@ class AccountController
         }
 
         $account = $this->accountManager->getByConfirmationToken($confirmationToken);
+
         if (!$account instanceof Account) {
             return View::create(
                 ['errors' => [$translator->trans(

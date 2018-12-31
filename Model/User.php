@@ -169,10 +169,16 @@ abstract class User
     /**
      * @return Account
      */
-    public abstract function getAccount(): Account;
+    public function getAccount(): \FTD\SaasBundle\Model\Account
+    {
+        return $this->account;
+    }
 
     /**
-     * @param Account $account
+     * @param \FTD\SaasBundle\Model\Account $account
      */
-    public abstract function setAccount(Account $account): void;
+    public function setAccount(\FTD\SaasBundle\Model\Account $account): void
+    {
+        $this->account = $account;
+    }
 }

@@ -32,40 +32,4 @@ class Subscription extends BaseSubscription
      * @ORM\Column(type="integer")
      */
     protected $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="FTD\SaasBundle\Entity\User", mappedBy="subscription", cascade={"persist"})
-     */
-    protected $users;
-
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
-
-    /**
-     * @return ArrayCollection|User[]
-     */
-    public function getUsers(): ArrayCollection
-    {
-        return $this->users;
-    }
-
-    public function addUser(\FTD\SaasBundle\Model\User $user)
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setSubscription($this);
-        }
-    }
-
-    public function removeUser(\FTD\SaasBundle\Model\User $user)
-    {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
-            if ($user->getSubscription() === $this) {
-                $user->setSubscription(null);
-            }
-        }
-    }
 }

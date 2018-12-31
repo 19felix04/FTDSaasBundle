@@ -24,7 +24,7 @@ interface CRUDEntityManagerInterface
      * @param mixed $entity
      * @param bool  $flush
      */
-    public function update($entity, $flush = true);
+    public function update($entity, $flush = true) :void;
 
     /**
      * The function removes the passing entity from database.
@@ -32,5 +32,5 @@ interface CRUDEntityManagerInterface
      * @param mixed $entity
      * @param bool  $flush
      */
-    public function remove($entity, $flush = true);
+    public function remove($entity, $flush = true) :void;
 }

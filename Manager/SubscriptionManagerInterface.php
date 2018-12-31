@@ -34,14 +34,14 @@ interface SubscriptionManagerInterface extends CRUDEntityManagerInterface
      *
      * @return mixed
      */
-    public function update($account, $flush = true);
+    public function update($account, $flush = true) :void;
 
     /**
      * @param Account $account
      *
      * @return Subscription[]
      */
-    public function getByAccount(Account $account);
+    public function getByAccount(Account $account) :array;
 
     /**
      * The function returns the class-name of the entity which represents the subscription.

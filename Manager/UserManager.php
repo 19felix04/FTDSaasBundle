@@ -11,8 +11,8 @@
 
 namespace FTD\SaasBundle\Manager;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use FTD\SaasBundle\Model\User;
-use FTD\SaasBundle\Repository\UserRepository;
 
 /**
  * The class UserManager manage the updating and finding of an user entity.
@@ -54,9 +54,9 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     }
 
     /**
-     * @return UserRepository
+     * @return ObjectRepository
      */
-    public function getRepository(): UserRepository
+    public function getRepository()
     {
         return $this->entityManager->getRepository($this->getClass());
     }
