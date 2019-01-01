@@ -23,6 +23,9 @@ ftd_saas:
         accountManager: 'FTD\SaasBundle\Manager\AccountManager'
         subscriptionManager: 'FTD\SaasBundle\Manager\SubscriptionManager'
         userManager: 'FTD\SaasBundle\Manager\UserManager'
+    creationHandler:
+        accountCreationHandler: 'FTD\SaasBundle\Service\Account\AccountCreationHandler'
+        subscriptionCreationHandler: 'FTD\SaasBundle\Service\Subscription\SubscriptionCreationHandler'
 ````
 
 ## Global settings (settings)
@@ -70,3 +73,10 @@ The manager handles interacting with subscriptions. The service has to implement
 
 ### userManager
 The manager handles interacting with users. The service has to implement FTD\SaasBundle\Manager\UserManagerInterface
+
+## creationHandler
+### accountCreationHandler
+A service (implements `FTD\SaasBundle\Service\Account\AccountCreationHandlerInterface`) can be placed here. When a account is created, the function `process` is called.
+
+### subscriptionCreationHandler
+A service (implements `FTD\SaasBundle\Service\Subscription\SubscriptionCreationHandlerInterface`) can be placed here. When a subscription is created, the function `process` is called.
