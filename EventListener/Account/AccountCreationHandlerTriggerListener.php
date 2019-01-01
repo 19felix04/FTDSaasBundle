@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * @author Felix Niedballa <schreib@felixniedballa.de>
  */
-class AccountConnectionListener implements EventSubscriberInterface
+class AccountCreationHandlerTriggerListener implements EventSubscriberInterface
 {
     /**
      * @var AccountCreationHandlerInterface
@@ -50,14 +50,14 @@ class AccountConnectionListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FTDSaasBundleEvents::ACCOUNT_CREATE => 'connectAccountToExistingAccount',
+            FTDSaasBundleEvents::ACCOUNT_CREATE => 'triggerHandler',
         ];
     }
 
     /**
      * @param AccountEvent $accountEvent
      */
-    public function connectAccountToExistingAccount(AccountEvent $accountEvent)
+    public function triggerHandler(AccountEvent $accountEvent)
     {
         $account = $accountEvent->getAccount();
         $users = $this->userManager->getUsersByEmail($account->getEmail());

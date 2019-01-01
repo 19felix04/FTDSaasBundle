@@ -79,7 +79,7 @@ class SubscriptionController
     }
 
     /**
-     * @Rest\Get("subscription")
+     * @Rest\Get("subscriptions")
      */
     public function getSubscriptionsAction()
     {
@@ -91,9 +91,51 @@ class SubscriptionController
     }
 
     /**
+     * @return View
+     *
+     * @Rest\Put("subscriptions/current")
+     */
+    public function putCurrentSubscriptionAction()
+    {
+        $subscription = $this->authentication->getCurrentSubscription();
+
+        if($subscription === null) {
+            return View::create([], Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->crudHandler->handleUpdateRequest(
+            $subscription,
+            $this->subscriptionManager,
+            $this->subscriptionTypeClass,
+            'subscription',
+            Response::HTTP_OK,
+            FTDSaasBundleEvents::SUBSCRIPTION_UPDATE,
+            new SubscriptionEvent($subscription)
+        );
+    }
+
+    /**
+     * @return View
+     *
+     * @Rest\Get("subscriptions/current")
+     */
+    public function getCurrentSubscriptionAction()
+    {
+        $subscription = $this->authentication->getCurrentSubscription();
+
+        if($subscription === null) {
+            return View::create([], Response::HTTP_NOT_FOUND);
+        }
+
+        return View::create([
+            'subscription' => $subscription
+        ]);
+    }
+
+    /**
      * @return \FOS\RestBundle\View\View
      *
-     * @Rest\Post("subscription")
+     * @Rest\Post("subscriptions")
      */
     public function postSubscriptionAction()
     {

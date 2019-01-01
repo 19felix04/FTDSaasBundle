@@ -75,6 +75,8 @@ abstract class User extends ApiResource
 
     /**
      * @var Account
+     *
+     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Account")
      */
     protected $account;
 

@@ -25,6 +25,9 @@ abstract class Subscription
 {
     /**
      * @var int
+     *
+     * @JMS\Expose()
+     * @JMS\Groups({"detail", "list"})
      */
     protected $id;
 

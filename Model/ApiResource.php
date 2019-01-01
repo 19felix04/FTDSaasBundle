@@ -83,7 +83,7 @@ abstract class ApiResource
     protected $createdBy;
 
     /**
-     * @var \FTD\SaasBundle\Entity\Subscription
+     * @var \FTD\SaasBundle\Model\Subscription
      *
      * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Subscription")
      */
@@ -234,9 +234,9 @@ abstract class ApiResource
     }
 
     /**
-     * @return User
+     * @return User|null
      */
-    public function getCreatedBy(): User
+    public function getCreatedBy(): ?User
     {
         return $this->createdBy;
     }
@@ -254,19 +254,19 @@ abstract class ApiResource
     }
 
     /**
-     * @return \FTD\SaasBundle\Entity\Subscription
+     * @return \FTD\SaasBundle\Model\Subscription
      */
-    public function getSubscription(): ?\FTD\SaasBundle\Entity\Subscription
+    public function getSubscription(): ?\FTD\SaasBundle\Model\Subscription
     {
         return $this->subscription;
     }
 
     /**
-     * @param \FTD\SaasBundle\Entity\Subscription $subscription
+     * @param \FTD\SaasBundle\Model\Subscription $subscription
      *
      * @return self
      */
-    public function setSubscription(?\FTD\SaasBundle\Entity\Subscription $subscription): self
+    public function setSubscription(?\FTD\SaasBundle\Model\Subscription $subscription): self
     {
         $this->subscription = $subscription;
 

@@ -42,4 +42,9 @@ final class FTDSaasBundleEvents
      * The event occurs when an user creates an new subscription.
      */
     const SUBSCRIPTION_CREATE = 'ftd.saas_bundle.subscription.create';
+
+    /**
+     * The event occurs when an user updates a subscription.
+     */
+    const SUBSCRIPTION_UPDATE = 'ftd.saas_bundle.subscription.update';
 }
