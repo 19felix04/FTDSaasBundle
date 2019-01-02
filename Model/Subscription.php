@@ -46,6 +46,14 @@ abstract class Subscription
      */
     protected $users;
 
+    /**
+     * @var bool
+     *
+     * @JMS\Expose()
+     * @JMS\Groups({"detail", "list"})
+     */
+    protected $userCanEdit;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -103,5 +111,35 @@ abstract class Subscription
                 $user->setSubscription(null);
             }
         }
+    }
+
+    public function getApiPath()
+    {
+        return 'subscriptions';
+    }
+
+    public function checkUserCanEdit(User $user)
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserCanEdit()
+    {
+        return $this->userCanEdit;
+    }
+
+    /**
+     * @param bool $userCanEdit
+     *
+     * @return $this
+     */
+    public function setUserCanEdit($userCanEdit)
+    {
+        $this->userCanEdit = $userCanEdit;
+
+        return $this;
     }
 }

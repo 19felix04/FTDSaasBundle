@@ -147,6 +147,14 @@ abstract class ApiResource
     }
 
     /**
+     * @return bool
+     */
+    public function getUserCanDelete()
+    {
+        return $this->userCanDelete;
+    }
+
+    /**
      * @param bool $userCanDelete
      *
      * @return $this
@@ -156,6 +164,14 @@ abstract class ApiResource
         $this->userCanDelete = $userCanDelete;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserCanSee()
+    {
+        return $this->userCanSee;
     }
 
     /**
