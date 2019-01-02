@@ -11,6 +11,7 @@
 
 namespace FTD\SaasBundle\Manager;
 
+use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Model\User;
 
 /**
@@ -38,4 +39,12 @@ interface UserManagerInterface extends CRUDEntityManagerInterface
      * @return string
      */
     public function getClass(): string;
+
+    /**
+     * @param int     $subscriptionID
+     * @param Account $account
+     *
+     * @return User|null
+     */
+    public function getUserBySubscriptionIDAndAccount(int $subscriptionID, Account $account): ?User;
 }

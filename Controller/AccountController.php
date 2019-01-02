@@ -17,7 +17,9 @@ use FTD\SaasBundle\Event\AccountEvent;
 use FTD\SaasBundle\Form\PasswordResetType;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Manager\AccountManagerInterface;
+use FTD\SaasBundle\Manager\UserManagerInterface;
 use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Util\TokenGenerator;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -50,6 +52,11 @@ class AccountController
     private $accountManager;
 
     /**
+     * @var UserManagerInterface
+     */
+    private $userManager;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -68,6 +75,7 @@ class AccountController
      * @param Authentication           $authentication
      * @param FormFactoryInterface     $formFactory
      * @param AccountManagerInterface  $accountManager
+     * @param UserManagerInterface     $userManager
      * @param EventDispatcherInterface $eventDispatcher
      * @param string                   $accountTypeClass
      * @param int                      $settingsPasswordResetTime
@@ -76,6 +84,7 @@ class AccountController
         Authentication $authentication,
         FormFactoryInterface $formFactory,
         AccountManagerInterface $accountManager,
+        UserManagerInterface $userManager,
         EventDispatcherInterface $eventDispatcher,
         string $accountTypeClass,
         int $settingsPasswordResetTime
@@ -83,6 +92,7 @@ class AccountController
         $this->authentication = $authentication;
         $this->formFactory = $formFactory;
         $this->accountManager = $accountManager;
+        $this->userManager = $userManager;
         $this->eventDispatcher = $eventDispatcher;
         $this->accountTypeClass = $accountTypeClass;
         $this->passwordResetTime = $settingsPasswordResetTime;
@@ -223,5 +233,28 @@ class AccountController
         }
 
         return View::create(['form' => $form], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @param int $subscriptionID
+     *
+     * @return View
+     *
+     * @Rest\Put("account/subscription/{subscriptionID}")
+     */
+    public function putSubscriptionAction(
+        int $subscriptionID
+    ) {
+        $account = $this->authentication->getCurrentAccount();
+        $user = $this->userManager->getUserBySubscriptionIDAndAccount($subscriptionID, $account);
+
+        if (null !== $user) {
+            $account->setCurrentUser($user);
+            $this->accountManager->update($account);
+
+            return View::create([], Response::HTTP_OK);
+        }
+
+        return View::create([], Response::HTTP_BAD_REQUEST);
     }
 }

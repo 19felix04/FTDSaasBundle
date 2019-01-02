@@ -11,9 +11,9 @@
 
 namespace FTD\SaasBundle\Manager;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use FTD\SaasBundle\Model\Account;
 use FTD\SaasBundle\Model\User;
-use Redaxeo\Repository\UserRepository;
+use FTD\SaasBundle\Repository\UserRepository;
 
 /**
  * The class UserManager manage the updating and finding of an user entity.
@@ -53,6 +53,20 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     public function getUsersByEmail(string $email): array
     {
         return $this->getRepository()->findBy(['email' => $email]);
+    }
+
+    /**
+     * @param int     $subscriptionID
+     * @param Account $account
+     *
+     * @return User|null
+     */
+    public function getUserBySubscriptionIDAndAccount(int $subscriptionID, Account $account): ?User
+    {
+        return $this->entityManager->getRepository($this->getClass())->findOneBy([
+            'subscription' => $subscriptionID,
+            'account' => $account->getId(),
+        ]);
     }
 
     /**
