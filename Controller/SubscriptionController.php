@@ -99,7 +99,7 @@ class SubscriptionController
     {
         $subscription = $this->authentication->getCurrentSubscription();
 
-        if($subscription === null) {
+        if (null === $subscription) {
             return View::create([], Response::HTTP_NOT_FOUND);
         }
 
@@ -123,12 +123,12 @@ class SubscriptionController
     {
         $subscription = $this->authentication->getCurrentSubscription();
 
-        if($subscription === null) {
+        if (null === $subscription) {
             return View::create([], Response::HTTP_NOT_FOUND);
         }
 
         return View::create([
-            'subscription' => $subscription
+            'subscription' => $subscription,
         ]);
     }
 

@@ -68,7 +68,7 @@ class SelfPathSettingListener implements EventSubscriber
     {
         if (
             $entity instanceof ApiResource
-            && $this->requestStack->getCurrentRequest() !== null
+            && null !== $this->requestStack->getCurrentRequest()
         ) {
             $entity->setSelf(sprintf(
                 '%sapi/%s/%s',

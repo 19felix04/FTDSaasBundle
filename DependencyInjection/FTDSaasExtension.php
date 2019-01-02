@@ -78,7 +78,7 @@ class FTDSaasExtension extends Extension
 
         $creationHandlerServices = [
             'accountCreationHandler' => AccountCreationHandlerInterface::class,
-            'subscriptionCreationHandler' => SubscriptionCreationHandlerInterface::class
+            'subscriptionCreationHandler' => SubscriptionCreationHandlerInterface::class,
         ];
 
         foreach ($creationHandlerServices as $serviceID => $serviceClass) {
