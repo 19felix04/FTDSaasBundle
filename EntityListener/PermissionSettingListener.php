@@ -96,6 +96,7 @@ class PermissionSettingListener implements EventSubscriber
         $user = $this->authentication->getCurrentUser();
 
         if (null !== $user) {
+            $subscription->setUserCanSee($subscription->checkUserCanSee($user));
             $subscription->setUserCanEdit($subscription->checkUserCanEdit($user));
         }
     }

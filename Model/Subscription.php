@@ -54,6 +54,14 @@ abstract class Subscription
      */
     protected $userCanEdit;
 
+    /**
+     * @var bool
+     *
+     * @JMS\Expose()
+     * @JMS\Groups({"detail", "list"})
+     */
+    protected $userCanSee;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -120,7 +128,7 @@ abstract class Subscription
 
     public function checkUserCanEdit(User $user)
     {
-        return true;
+        return $this->users->contains($user);
     }
 
     /**
@@ -139,6 +147,31 @@ abstract class Subscription
     public function setUserCanEdit($userCanEdit)
     {
         $this->userCanEdit = $userCanEdit;
+
+        return $this;
+    }
+
+    public function checkUserCanSee(User $user)
+    {
+        return $this->users->contains($user);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserCanSee()
+    {
+        return $this->userCanSee;
+    }
+
+    /**
+     * @param bool $userCanSee
+     *
+     * @return $this
+     */
+    public function setUserCanSee($userCanSee)
+    {
+        $this->userCanSee = $userCanSee;
 
         return $this;
     }

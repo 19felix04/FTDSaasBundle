@@ -155,27 +155,11 @@ class CRUDHandler
         $form->submit($this->requestStack->getMasterRequest()->request->all());
 
         if ($entity instanceof ApiResource) {
-            /*
-             * @var ApiResource
-             */
-            if (null === $entity->getId() && !$entity->checkUserCanCreate($this->authentication->getCurrentUser())) {
-                throw new AccessDeniedHttpException(
-                    sprintf(
-                        'User not able to create entity of class %s',
-                        \get_class($entity)
-                    )
-                );
+            if (null === $entity->getSubscription()) {
+                $entity->setSubscription($this->authentication->getCurrentSubscription());
             }
 
-            if (null !== $entity->getId() && !$entity->checkUserCanEdit($this->authentication->getCurrentUser())) {
-                throw new AccessDeniedHttpException(
-                    sprintf(
-                        'User not able to edit %s with id %s',
-                        \get_class($entity),
-                        $entity->getId()
-                    )
-                );
-            }
+            $this->checkApiResourcePermissions($entity);
         }
 
         if ($form->isValid()) {
@@ -227,5 +211,39 @@ class CRUDHandler
         }
 
         return View::create([], $successStatusCode);
+    }
+
+    /**
+     * The function checks permission to create or update the passing ApiResource.
+     * If updating or creating is not allowed false will be returned.
+     *
+     * @param ApiResource $apiResource
+     *
+     * @throw AccessDeniedHttpException
+     */
+    private function checkApiResourcePermissions(ApiResource $apiResource)
+    {
+        if (null === $apiResource->getId() && !$apiResource->checkUserCanCreate(
+                $this->authentication->getCurrentUser()
+            )) {
+            throw new AccessDeniedHttpException(
+                sprintf(
+                    'User not able to create entity of class %s',
+                    \get_class($apiResource)
+                )
+            );
+        }
+
+        if (null !== $apiResource->getId() && !$apiResource->checkUserCanEdit(
+                $this->authentication->getCurrentUser()
+            )) {
+            throw new AccessDeniedHttpException(
+                sprintf(
+                    'User not able to edit %s with id %s',
+                    \get_class($apiResource),
+                    $apiResource->getId()
+                )
+            );
+        }
     }
 }

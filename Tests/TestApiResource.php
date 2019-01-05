@@ -34,7 +34,7 @@ class TestApiResource extends ApiResource
     /**
      * {@inheritdoc}
      */
-    public function checkUserCanCreate(\FTD\SaasBundle\Entity\User $user)
+    public function checkUserCanCreate(\FTD\SaasBundle\Model\User $user)
     {
         return true;
     }
@@ -42,7 +42,7 @@ class TestApiResource extends ApiResource
     /**
      * {@inheritdoc}
      */
-    public function checkUserCanEdit(\FTD\SaasBundle\Entity\User $user)
+    public function checkUserCanEdit(\FTD\SaasBundle\Model\User $user)
     {
         return true;
     }
@@ -50,7 +50,7 @@ class TestApiResource extends ApiResource
     /**
      * {@inheritdoc}
      */
-    public function checkUserCanSee(\FTD\SaasBundle\Entity\User $user)
+    public function checkUserCanSee(\FTD\SaasBundle\Model\User $user)
     {
         return true;
     }
@@ -58,7 +58,7 @@ class TestApiResource extends ApiResource
     /**
      * {@inheritdoc}
      */
-    public function checkUserCanDelete(\FTD\SaasBundle\Entity\User $user)
+    public function checkUserCanDelete(\FTD\SaasBundle\Model\User $user)
     {
         return true;
     }

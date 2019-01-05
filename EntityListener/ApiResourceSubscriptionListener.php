@@ -83,8 +83,9 @@ class ApiResourceSubscriptionListener implements EventSubscriber
     {
         if (
             true === $this->settingsSoftwareAsAService
-            && null !== ($subscription = $this->authentication->getCurrentSubscription())
             && $entity instanceof ApiResource
+            && null === $entity->getSubscription()
+            && null !== ($subscription = $this->authentication->getCurrentSubscription())
         ) {
             $entity->setSubscription($subscription);
         }

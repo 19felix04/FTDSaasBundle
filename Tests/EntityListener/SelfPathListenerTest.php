@@ -50,7 +50,7 @@ class SelfPathListenerTest extends TestCase
     public function setUp()
     {
         $currentRequest = $this->createMock(Request::class);
-        $currentRequest->method('getBaseUrl')->willReturn('http://127.0.0.1/');
+        $currentRequest->method('getSchemeAndHttpHost')->willReturn('http://127.0.0.1/');
 
         $this->requestStack = $this->createMock(RequestStack::class);
         $this->requestStack->method('getCurrentRequest')->willReturn($currentRequest);
