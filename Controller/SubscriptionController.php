@@ -13,12 +13,14 @@ namespace FTD\SaasBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use FTD\SaasBundle\Entity\Subscription;
 use FTD\SaasBundle\Event\SubscriptionEvent;
 use FTD\SaasBundle\FTDSaasBundleEvents;
 use FTD\SaasBundle\Manager\SubscriptionManagerInterface;
 use FTD\SaasBundle\Service\Authentication;
 use FTD\SaasBundle\Service\Request\CRUDHandler;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -130,6 +132,37 @@ class SubscriptionController
         return View::create([
             'subscription' => $subscription,
         ]);
+    }
+
+    /**
+     * @return View
+     *
+     * @Rest\Get("subscriptions/{subscription}")
+     */
+    public function getSubscriptionAction(Subscription $subscription)
+    {
+        return View::create([
+            'subscription' => $subscription,
+        ]);
+    }
+
+    /**
+     * @return View
+     *
+     * @Rest\Put("subscriptions/{subscription}")
+     */
+    public function putSubscriptionAction(Subscription $subscription)
+    {
+        if (!$subscription->getUserCanEdit()) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return $this->crudHandler->handleUpdateRequest(
+            $subscription,
+            $this->subscriptionManager,
+            $this->subscriptionTypeClass,
+            Response::HTTP_OK
+        );
     }
 
     /**
