@@ -51,6 +51,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('mailer')
                     ->addDefaultsIfNotSet()
                     ->children()
+                        ->enumNode('content_type')->values(['text/plain', 'text/html'])->defaultValue('text/plain')->end()
                         ->scalarNode('address')->isRequired()->end()
                         ->scalarNode('sender_name')->isRequired()->end()
                     ->end()

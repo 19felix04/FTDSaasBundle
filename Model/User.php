@@ -195,7 +195,7 @@ abstract class User extends ApiResource
     /**
      * @return Account
      */
-    public function getAccount(): \FTD\SaasBundle\Model\Account
+    public function getAccount(): ?\FTD\SaasBundle\Model\Account
     {
         return $this->account;
     }

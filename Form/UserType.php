@@ -13,7 +13,7 @@ namespace FTD\SaasBundle\Form;
 
 use FTD\SaasBundle\Entity\User;
 use FTD\SaasBundle\Manager\UserManagerInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use FTD\SaasBundle\Validator\Constraints\UserConstraint;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -71,14 +71,7 @@ class UserType extends BaseType
         parent::configureOptions($resolver);
         $resolver->setDefault('data_class', $this->userManager->getClass());
         $resolver->setDefault('constraints', [
-            new UniqueEntity([
-                'fields' => ['subscription', 'email'],
-                'errorPath' => 'email',
-            ]),
-            new UniqueEntity([
-                'fields' => ['subscription', 'username'],
-                'errorPath' => 'username',
-            ]),
+            new UserConstraint(),
         ]);
     }
 }

@@ -9,6 +9,7 @@
             <bind key="$templatePasswordForget" type="string">%ftd_saas.template.passwordForget%</bind>
             <bind key="$templateAccountCreate" type="string">%ftd_saas.template.accountCreate%</bind>
 
+            <bind key="$mailContentType" type="string">%ftd_saas.mailer.content_type%</bind>
             <bind key="$mailerAddress" type="string">%ftd_saas.mailer.address%</bind>
             <bind key="$mailerSenderName" type="string">%ftd_saas.mailer.sender_name%</bind>
 

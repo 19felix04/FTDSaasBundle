@@ -34,20 +34,28 @@ class Mailer
     private $mailerSenderName;
 
     /**
+     * @var string
+     */
+    private $mailContentType;
+
+    /**
      * Constructor with injecting SwiftMailer and mail-header-data.
      *
      * @param \Swift_Mailer $swiftMailer
      * @param string        $mailerAddress
      * @param string        $mailerSenderName
+     * @param string        $mailContentType
      */
     public function __construct(
         \Swift_Mailer $swiftMailer,
         string $mailerAddress,
-        string $mailerSenderName
+        string $mailerSenderName,
+        string $mailContentType
     ) {
         $this->swiftMailer = $swiftMailer;
         $this->mailerAddress = $mailerAddress;
         $this->mailerSenderName = $mailerSenderName;
+        $this->mailContentType = $mailContentType;
     }
 
     /**
@@ -62,8 +70,9 @@ class Mailer
         $message = (new \Swift_Message($subject))
             ->setFrom([$this->mailerAddress => $this->mailerSenderName])
             ->setTo([$receiver])
+            ->setContentType($this->mailContentType)
             ->setBody($content);
 
-        return (bool) $this->swiftMailer->send($message);
+        return (bool)$this->swiftMailer->send($message);
     }
 }

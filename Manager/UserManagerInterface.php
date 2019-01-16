@@ -12,6 +12,7 @@
 namespace FTD\SaasBundle\Manager;
 
 use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
 use FTD\SaasBundle\Model\User;
 
 /**
@@ -47,4 +48,32 @@ interface UserManagerInterface extends CRUDEntityManagerInterface
      * @return User|null
      */
     public function getUserBySubscriptionIDAndAccount(int $subscriptionID, Account $account): ?User;
+
+    /**
+     * The functions returns a user with the passing subscription and the passing username.
+     * If not user is found, null will returned.
+     *
+     * @param Subscription $subscription
+     * @param string       $username
+     *
+     * @return User|null
+     */
+    public function getUserBySubscriptionAndUsername(
+        Subscription $subscription,
+        string $username
+    ): ?User;
+
+    /**
+     * The functions returns a user with the passing subscription and the passing email.
+     * If not user is found, null will returned.
+     *
+     * @param Subscription $subscription
+     * @param string       $email
+     *
+     * @return User|null
+     */
+    public function getUserBySubscriptionAndEmail(
+        Subscription $subscription,
+        string $email
+    ): ?User;
 }

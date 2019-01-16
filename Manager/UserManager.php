@@ -12,6 +12,7 @@
 namespace FTD\SaasBundle\Manager;
 
 use FTD\SaasBundle\Model\Account;
+use FTD\SaasBundle\Model\Subscription;
 use FTD\SaasBundle\Model\User;
 use FTD\SaasBundle\Repository\UserRepository;
 
@@ -75,5 +76,27 @@ class UserManager extends BaseEntityManager implements UserManagerInterface
     public function getRepository()
     {
         return $this->entityManager->getRepository($this->getClass());
+    }
+
+    /**
+     * @param Subscription $subscription
+     * @param string       $username
+     *
+     * @return User|null
+     */
+    public function getUserBySubscriptionAndUsername(Subscription $subscription, string $username): ?User
+    {
+        return $this->entityManager->getRepository($this->getClass())->findOneBy([
+            'subscription' => $subscription->getId(),
+            'username' => $username,
+        ]);
+    }
+
+    public function getUserBySubscriptionAndEmail(Subscription $subscription, string $email): ?User
+    {
+        return $this->entityManager->getRepository($this->getClass())->findOneBy([
+            'subscription' => $subscription->getId(),
+            'email' => $email,
+        ]);
     }
 }
