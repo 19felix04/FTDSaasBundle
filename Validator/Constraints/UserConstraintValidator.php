@@ -65,19 +65,25 @@ class UserConstraintValidator extends ConstraintValidator
         }
 
         $subscription = null !== $value->getSubscription()
-                ? $value->getSubscription() : $this->authentication->getCurrentSubscription();
+            ? $value->getSubscription() : $this->authentication->getCurrentSubscription();
 
         $username = $value->getUsername();
         $user = $this->userManager->getUserBySubscriptionAndUsername($subscription, $username);
 
-        if (null !== $user) {
+        if (
+            null !== $user
+            && $user->getId() !== $value->getId()
+        ) {
             $this->context->buildViolation($constraint->usernameAlreadyExists)->atPath('username')->addViolation();
         }
 
         $email = $value->getEmail();
         $user = $this->userManager->getUserBySubscriptionAndEmail($subscription, $email);
 
-        if (null !== $user) {
+        if (
+            null !== $user &&
+            $user->getId() !== $value->getId()
+        ) {
             $this->context->buildViolation($constraint->emailAlreadyExists)->atPath('email')->addViolation();
         }
     }
