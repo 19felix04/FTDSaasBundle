@@ -30,4 +30,9 @@ class Account extends BaseAccount
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="User", mappedBy="account", cascade={"persist"})
+     */
+    protected $users;
 }
