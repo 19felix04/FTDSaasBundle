@@ -85,7 +85,7 @@ abstract class ApiResource
     /**
      * @var \FTD\SaasBundle\Model\Subscription
      *
-     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Subscription")
+     * @ORM\ManyToOne(targetEntity="FTD\SaasBundle\Entity\Subscription", cascade={"persist"})
      */
     protected $subscription;
 
