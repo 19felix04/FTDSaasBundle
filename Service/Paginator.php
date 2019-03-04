@@ -55,30 +55,33 @@ class Paginator
      *
      * @return array
      */
-    public function paginate(QueryBuilder $queryBuilder, $maxLimit = null)
+    public function paginate(QueryBuilder $queryBuilder, $maxLimit = self::LIMIT, $extraData = null)
     {
         $this->setLimit($maxLimit);
 
+        $results = $queryBuilder->getQuery()->getResult();
+
         $paginationData = [
             'limit' => $this->limit,
-            'results' => $this->getResults($queryBuilder, $this->getCurrentPage()),
-            'pages' => $this->getMaxPages($queryBuilder),
+            'maxResults' => count($results),
+            'results' => array_slice($results, ($this->getCurrentPage() - 1), $this->limit),
+            'pages' => $this->getMaxPages($results),
             'currentPage' => $this->getCurrentPage(),
-            'query' => $queryBuilder->getQuery()->getDQL(),
+            'query' => $queryBuilder->getQuery()->getSQL(),
         ];
+
+        if (null !== $extraData || is_array($extraData)) {
+            $paginationData = array_merge($paginationData, $extraData);
+        }
 
         return $paginationData;
     }
 
-    public function getMaxPages(QueryBuilder $queryBuilder)
+    public function getMaxPages($results)
     {
         try {
             if ($this->limit > 0) {
-                $queryBuilder
-                    ->select($queryBuilder->expr()->count($queryBuilder->getRootAliases()[0]))
-                    ->setMaxResults(null)->setFirstResult(0);
-
-                return intval(ceil($queryBuilder->getQuery()->getSingleScalarResult() / $this->limit));
+                return ceil(count($results) / $this->limit);
             }
         } catch (\Exception $exception) {
             return '-1';
@@ -87,10 +90,18 @@ class Paginator
 
     public function getResults(QueryBuilder $queryBuilder, $currentPage)
     {
-        $firstResult = ($currentPage - 1) * $this->limit;
-        $query = $queryBuilder->setFirstResult($firstResult)->setMaxResults($this->limit);
+        $queryBuilder
+            ->setFirstResult(0)
+        ;
 
-        return $query->getQuery()->getResult();
+        if ($currentPage > 1) {
+            $queryBuilder
+                ->setFirstResult(($currentPage - 1) * $this->limit)
+                ->setMaxResults($currentPage * $this->limit)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
