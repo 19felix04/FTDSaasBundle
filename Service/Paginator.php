@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class Paginator
 {
-    const LIMIT = 10;
+    const LIMIT = 300;
 
     /**
      * @var int
@@ -121,12 +121,9 @@ class Paginator
      */
     private function setLimit($maxLimit = null)
     {
-        if (null === $maxLimit) {
-            $maxLimit = 300;
-        }
-
         if ($this->requestStack->getMasterRequest()->query->get('limit', false)) {
             $limitQuery = $this->requestStack->getMasterRequest()->query->get('limit', false);
+
             if ('-1' === $limitQuery || 0 === intval($limitQuery)) {
                 $this->limit = $maxLimit;
             } elseif (intval($limitQuery) > $maxLimit) {
