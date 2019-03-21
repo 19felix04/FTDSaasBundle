@@ -73,6 +73,6 @@ class Mailer
             ->setContentType($this->mailContentType)
             ->setBody($content);
 
-        return (bool)$this->swiftMailer->send($message);
+        return (bool) $this->swiftMailer->send($message);
     }
 }

@@ -42,7 +42,7 @@ class Authentication
     /**
      * The function returns the current user or null if no user logged in.
      *
-     * @return User|null|object
+     * @return User|object|null
      */
     public function getCurrentUser(): ?User
     {

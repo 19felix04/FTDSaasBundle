@@ -35,7 +35,7 @@ class AccountRepository extends ServiceEntityRepository
     /**
      * @param string $confirmationToken
      *
-     * @return null|Account
+     * @return Account|null
      */
     public function findByConfirmationToken(?string $confirmationToken)
     {

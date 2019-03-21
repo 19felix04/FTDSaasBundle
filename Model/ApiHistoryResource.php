@@ -80,7 +80,7 @@ abstract class ApiHistoryResource extends ApiResource
     }
 
     /**
-     * @param null|self $historyParent
+     * @param self|null $historyParent
      *
      * @return ApiHistoryResource
      */

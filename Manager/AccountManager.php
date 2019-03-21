@@ -77,7 +77,7 @@ class AccountManager extends BaseEntityManager implements AccountManagerInterfac
     }
 
     /**
-     * @return null|Account
+     * @return Account|null
      */
     public function create(): Account
     {

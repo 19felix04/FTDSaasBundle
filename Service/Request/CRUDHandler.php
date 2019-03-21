@@ -107,18 +107,17 @@ class CRUDHandler
         $form = $this->formFactory->create($filterFormClass);
         $form->submit($this->requestStack->getCurrentRequest()->query->all());
 
-        if($serviceEntityRepository instanceof ApiResourceRepositoryInterface) {
+        if ($serviceEntityRepository instanceof ApiResourceRepositoryInterface) {
             $orderByField = $this->requestStack->getMasterRequest()->query->get('orderBy', $serviceEntityRepository->getStandardSortField());
             $orderByDirection = $this->requestStack->getMasterRequest()->query->get('order', $serviceEntityRepository->getStandardSortDirection());
 
-            if(
+            if (
                 in_array($orderByField, $serviceEntityRepository->getSortableFields())
                 && in_array($orderByDirection, ['ASC', 'DESC'])
             ) {
                 $queryBuilder->orderBy($queryBuilder->getRootAliases()[0] . '.' . $orderByField, $orderByDirection);
             }
         }
-
 
         $this->filterBuilderUpdater->addFilterConditions($form, $queryBuilder);
 

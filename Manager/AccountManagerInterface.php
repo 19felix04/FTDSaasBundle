@@ -39,7 +39,7 @@ interface AccountManagerInterface
     /**
      * @param string $email
      *
-     * @return null|Account
+     * @return Account|null
      */
     public function getAccountByEmail($email): ?Account;
 

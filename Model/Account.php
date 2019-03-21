@@ -115,7 +115,7 @@ abstract class Account implements UserInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getConfirmationToken()
     {
@@ -236,7 +236,7 @@ abstract class Account implements UserInterface
     }
 
     /**
-     * @return null|\FTD\SaasBundle\Model\User
+     * @return \FTD\SaasBundle\Model\User|null
      */
     public function getCurrentUser(): ?\FTD\SaasBundle\Model\User
     {
